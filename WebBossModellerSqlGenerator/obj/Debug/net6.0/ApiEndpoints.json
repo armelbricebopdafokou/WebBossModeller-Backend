@@ -1,0 +1,134 @@
+[
+  {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.MSSQLController",
+    "Method": "CreateDatabase",
+    "RelativePath": "api/MSSQL/CreateDatabase",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dbName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.MSSQLController",
+    "Method": "CreateSchema",
+    "RelativePath": "api/MSSQL/CreateSchema",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dbSchema",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.MSSQLController",
+    "Method": "GenerateSqlForGraphic",
+    "RelativePath": "api/MSSQL/GenerateSqlForGraphic",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "graphicDTO",
+        "Type": "WebBossModellerSqlGenerator.DTO.GraphicDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.PostgresSQLController",
+    "Method": "CreateDatabase",
+    "RelativePath": "api/PostgresSQL/CreateDatabase",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dbName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "isCaseSensitive",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.PostgresSQLController",
+    "Method": "CreateSchema",
+    "RelativePath": "api/PostgresSQL/CreateSchema",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dbSchema",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "isCaseSensitive",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.PostgresSQLController",
+    "Method": "GenerateSqlForGraphic",
+    "RelativePath": "api/PostgresSQL/GenerateSqlForGraphic",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "graphicDTO",
+        "Type": "WebBossModellerSqlGenerator.DTO.GraphicDTO",
+        "IsRequired": true
+      },
+      {
+        "Name": "isCaseSensitive",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.WeatherForecastController",
+    "Method": "Get",
+    "RelativePath": "WeatherForecast",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[WebBossModellerSqlGenerator.WeatherForecast, WebBossModellerSqlGenerator, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "EndpointName": "GetWeatherForecast"
+  }
+]
