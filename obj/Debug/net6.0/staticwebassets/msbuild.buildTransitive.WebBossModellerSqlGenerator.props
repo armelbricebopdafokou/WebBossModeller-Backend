@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../buildMultiTargeting/WebBossModellerSqlGenerator.props" />
+</Project>
