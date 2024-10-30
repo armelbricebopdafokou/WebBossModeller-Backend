@@ -5,7 +5,7 @@
         public List<DbTable> Tables { get; init; }
         public string ToSqlForMSSSQL()
         {
-            return $"\n CREATE SCHEMA [{Name}]; \n GO";
+            return $"\n CREATE SCHEMA [{Name}]; \n GO \n";
         }
 
         public string ToSqlForMySQL()
@@ -16,9 +16,9 @@
         public string ToSqlForPostgresSQL(bool isCaseSensitive)
         {
             if (isCaseSensitive) 
-                return $"CREATE SCHEMA \"{Name}\"";
+                return $"CREATE SCHEMA \"{Name}\" \n";
             else
-                return $"CREATE SCHEMA {Name}";
+                return $"CREATE SCHEMA {Name} \n";
         }
     }
 }

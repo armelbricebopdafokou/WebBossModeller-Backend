@@ -36,19 +36,46 @@ namespace WebBossModellerSqlGenerator.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GenerateSqlForGraphic(GraphicDTO graphicDTO, bool isCaseSensitive=false)
+        public async Task<IActionResult> GenerateSqlForGraphic([FromBody]GraphicDTO graphicDTO)
         {
+            bool isCaseSensitive= graphicDTO.IsCaseSensitive;
             StringBuilder sb = new StringBuilder();
             DbDatabase dbDatabase = new DbDatabase(graphicDTO.DatabaseName);
-            sb.Append(dbDatabase.ToSqlForMSSSQL());
+            sb.Append(dbDatabase.ToSqlForPostgresSQL(isCaseSensitive));
             DbSchema dbSchema = new DbSchema(graphicDTO.SchemaName);
             sb.Append(dbSchema.ToSqlForPostgresSQL(isCaseSensitive));
-            sb.Append("USE " + dbSchema.Name + "\n");
+            if (isCaseSensitive == true)
+                sb.Append("SET search_path TO \"" + dbSchema.Name + "\" \n");
+            else
+                sb.Append("SET search_path TO " + dbSchema.Name + "\n");
             foreach (var elt in graphicDTO.tables)
             {
-                sb.Append(elt.ToSqlForPostgresSQL(isCaseSensitive));
+                // sb.Append(elt.ToSqlForPostgresSQL(isCaseSensitive));
+                DbTable table = new DbTable()
+                {
+                    Name = elt.Name,
+                    Schema = dbSchema
+                };
+
+                table.Columns = new List<DbColumn>();
+                foreach (var col in elt.Columns)
+                {
+                    DbColumn column = new DbColumn()
+                    {
+                        Name = col.Name,
+                        Type = col.Type,
+                        DefaultValue = col.DefaultValue,
+                        IsNull = col.IsNullable,
+                        IsPrimaryKey = col.IsPrimaryKey,
+                        IsUnique = col.IsUnique
+                    };
+                    table.Columns.Add(column);
+                }
+
+                sb.Append(table.ToSqlForPostgresSQL(isCaseSensitive) + "\n");
+                sb.Append(table.AddContrainstsPostgres(isCaseSensitive) + "\n");
             }
-            return Ok(sb);
+            return Ok(sb.ToString());
         }
 
     }
