@@ -5,10 +5,10 @@
         public string Name { get; init; }
         public string Type { get; init; }
         public bool IsNull { get; init; }
-        public bool IsUnique { get; init; }
-        public bool IsPrimaryKey { get; init; }
+        public bool IsUnique { get; init; } = false;
+        public bool IsPrimaryKey { get; init; }=false;
         public bool IsForeignKey { get; init; }
-        public string DefaultValue { get; init; } = string.Empty;
+        public string? DefaultValue { get; init; } = string.Empty;
         public DbTable ReferenceTable { get; init; }
 
         public string ToSqlForMSSSQL()

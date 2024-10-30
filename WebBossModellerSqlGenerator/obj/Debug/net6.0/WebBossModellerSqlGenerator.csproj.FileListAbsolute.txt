@@ -5,7 +5,11 @@ D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\bin\D
 D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\bin\Debug\net6.0\WebBossModellerSqlGenerator.runtimeconfig.json
 D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\bin\Debug\net6.0\WebBossModellerSqlGenerator.dll
 D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\bin\Debug\net6.0\WebBossModellerSqlGenerator.pdb
+D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\bin\Debug\net6.0\Microsoft.AspNetCore.JsonPatch.dll
+D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\bin\Debug\net6.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\bin\Debug\net6.0\Microsoft.OpenApi.dll
+D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\bin\Debug\net6.0\Newtonsoft.Json.dll
+D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll
 D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger.dll
 D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
@@ -16,6 +20,7 @@ D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\obj\D
 D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\obj\Debug\net6.0\WebBossModellerSqlGenerator.csproj.CoreCompileInputs.cache
 D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\obj\Debug\net6.0\WebBossModellerSqlGenerator.MvcApplicationPartsAssemblyInfo.cs
 D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\obj\Debug\net6.0\WebBossModellerSqlGenerator.MvcApplicationPartsAssemblyInfo.cache
+D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\obj\Debug\net6.0\WebBossModellerSqlGenerator.sourcelink.json
 D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\obj\Debug\net6.0\staticwebassets.build.json
 D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\obj\Debug\net6.0\staticwebassets.development.json
 D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\obj\Debug\net6.0\staticwebassets\msbuild.WebBossModellerSqlGenerator.Microsoft.AspNetCore.StaticWebAssets.props
@@ -30,4 +35,3 @@ D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\obj\D
 D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\obj\Debug\net6.0\WebBossModellerSqlGenerator.pdb
 D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\obj\Debug\net6.0\WebBossModellerSqlGenerator.genruntimeconfig.cache
 D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\obj\Debug\net6.0\ref\WebBossModellerSqlGenerator.dll
-D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\bin\Debug\net6.0\Newtonsoft.Json.dll
