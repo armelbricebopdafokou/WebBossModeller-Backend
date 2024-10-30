@@ -101,11 +101,6 @@
         "Name": "graphicDTO",
         "Type": "WebBossModellerSqlGenerator.DTO.GraphicDTO",
         "IsRequired": true
-      },
-      {
-        "Name": "isCaseSensitive",
-        "Type": "System.Boolean",
-        "IsRequired": false
       }
     ],
     "ReturnTypes": []
