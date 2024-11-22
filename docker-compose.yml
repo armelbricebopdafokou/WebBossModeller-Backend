@@ -1,0 +1,31 @@
+version: '4.0'
+services:
+  user:
+    build: 
+      context: ./Userservice
+      dockerfile: Dockerfile
+    ports:
+      - "8085:8085"
+    restart: always
+    environment:
+      - NODE_ENV=production
+  
+  sqlGenerator:
+    build: 
+      context: ./WebBossModellerApi
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    environment:
+      - NODE_ENV=production
+  
+  nginx:
+    build: 
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "82:82"
+    depends_on:
+      - user
+      - sqlGenerator
+      
