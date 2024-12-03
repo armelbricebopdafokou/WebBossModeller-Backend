@@ -16,7 +16,7 @@ namespace WebBossModellerSqlGenerator.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CreateDatabase(string dbName, bool isCaseSensitive = false)
+        public ActionResult<string> CreateDatabase(string dbName, bool isCaseSensitive = false)
         {
             if (string.IsNullOrWhiteSpace(dbName))
                 return BadRequest("Parameter Name is missing");
@@ -26,7 +26,7 @@ namespace WebBossModellerSqlGenerator.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CreateSchema(string dbSchema, bool isCaseSensitive=false)
+        public ActionResult<string> CreateSchema(string dbSchema, bool isCaseSensitive=false)
         {
             if (string.IsNullOrWhiteSpace(dbSchema))
                 return BadRequest("Parameter Name is missing");
@@ -36,7 +36,7 @@ namespace WebBossModellerSqlGenerator.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GenerateSqlForGraphic([FromBody]GraphicDTO graphicDTO)
+        public ActionResult<string> GenerateSqlForGraphic([FromBody]GraphicDTO graphicDTO)
         {
             bool isCaseSensitive= graphicDTO.IsCaseSensitive;
             StringBuilder sb = new StringBuilder();
