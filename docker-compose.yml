@@ -5,27 +5,37 @@ services:
       context: ./Userservice
       dockerfile: Dockerfile
     ports:
-      - "8085:8085"
+      - "8083:8083"
     restart: always
+    depends_on:
+      - traefik
     environment:
       - NODE_ENV=production
+    labels:
+      - "traefik.http.routers.api.rule=(Host(`app.localhost`) && PathPrefix(`/users`))"
   
   sqlGenerator:
     build: 
       context: ./WebBossModellerApi
       dockerfile: Dockerfile
     ports:
-      - "8083:8083"
+      - "8085:8085"
     environment:
       - NODE_ENV=production
-  
-  nginx:
-    build: 
-      context: ./nginx
-      dockerfile: Dockerfile
-    ports:
-      - "82:82"
     depends_on:
-      - user
-      - sqlGenerator
+      - traefik
+    labels:
+      - "traefik.http.routers.api.rule=(Host(`app.localhost`) && PathPrefix(`/sql`))"
+  
+  traefik: #reverse proxy
+    image: traefik:v3.2
+    command: --api.insecure=true --providers.docker
+    b ports:
+      # The HTTP port
+      - "82:82"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8082:8082"
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
       

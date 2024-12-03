@@ -6,6 +6,7 @@ import { errorConverter, errorHandler } from "./middleware";
 import { connectDB } from "./database";
 import config from "./config/config";
 import cors from 'cors';
+import passport from 'passport';
 
 const app:Express = express();
 let server: Server;
@@ -17,6 +18,7 @@ app.use(AuthRouter);
 app.use(UserRouter);
 app.use(errorConverter);
 app.use(errorHandler);
+app.use(passport.initialize());
 
 connectDB();
 
