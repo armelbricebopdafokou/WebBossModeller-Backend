@@ -7,7 +7,7 @@ using WebBossModellerSqlGenerator.Models;
 
 namespace WebBossModellerSqlGenerator.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("[controller]/[action]")]
     [ApiController]
     public class MSSQLController : ControllerBase
     {

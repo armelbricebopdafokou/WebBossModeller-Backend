@@ -1,10 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "XYxpdTha9i0=",
+  "dgSpecHash": "ceDbIxIT2I4=",
   "success": true,
   "projectFilePath": "D:\\BO\\sopra\\myteil\\WebBossModellerSqlGenerator\\WebBossModellerSqlGeneratorTest\\WebBossModellerSqlGeneratorTest.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\armel\\.nuget\\packages\\coverlet.collector\\3.2.0\\coverlet.collector.3.2.0.nupkg.sha512",
+    "C:\\Users\\armel\\.nuget\\packages\\gfoidl.analyzers\\0.2.0\\gfoidl.analyzers.0.2.0.nupkg.sha512",
+    "C:\\Users\\armel\\.nuget\\packages\\gfoidl.base64\\1.1.1\\gfoidl.base64.1.1.1.nupkg.sha512",
+    "C:\\Users\\armel\\.nuget\\packages\\jsonwebtoken\\1.9.4\\jsonwebtoken.1.9.4.nupkg.sha512",
     "C:\\Users\\armel\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\6.0.35\\microsoft.aspnetcore.jsonpatch.6.0.35.nupkg.sha512",
     "C:\\Users\\armel\\.nuget\\packages\\microsoft.aspnetcore.mvc.newtonsoftjson\\6.0.35\\microsoft.aspnetcore.mvc.newtonsoftjson.6.0.35.nupkg.sha512",
     "C:\\Users\\armel\\.nuget\\packages\\microsoft.codecoverage\\17.5.0\\microsoft.codecoverage.17.5.0.nupkg.sha512",

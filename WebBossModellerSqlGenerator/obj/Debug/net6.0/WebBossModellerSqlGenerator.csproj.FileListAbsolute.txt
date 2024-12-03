@@ -35,3 +35,5 @@ D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\obj\D
 D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\obj\Debug\net6.0\WebBossModellerSqlGenerator.pdb
 D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\obj\Debug\net6.0\WebBossModellerSqlGenerator.genruntimeconfig.cache
 D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\obj\Debug\net6.0\ref\WebBossModellerSqlGenerator.dll
+D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\bin\Debug\net6.0\gfoidl.Base64.dll
+D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGenerator\bin\Debug\net6.0\JsonWebToken.dll

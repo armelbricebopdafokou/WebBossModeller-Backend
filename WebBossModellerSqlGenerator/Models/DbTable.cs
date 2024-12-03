@@ -38,9 +38,9 @@ namespace WebBossModellerSqlGenerator.Models
         {
             string sql=string.Empty ;
             if(isCaseSensitive)
-                sql = $"CREATE  \"{Schema.Name}\".\"{Name}\" ({Environment.NewLine}";
+                sql = $"CREATE TABLE  \"{Name}\" ({Environment.NewLine}";
             else
-                sql = $"CREATE {Schema.Name}.{Name} ({Environment.NewLine}";
+                sql = $"CREATE TABLE {Name} ({Environment.NewLine}";
 
 
             foreach (var col in Columns)
@@ -53,26 +53,33 @@ namespace WebBossModellerSqlGenerator.Models
 
         public string AddContrainstsPostgres(bool isSensitive=false)
         {
-            if (Columns != null && Columns.Where(c => c.IsPrimaryKey).Count() > 1)
+            if (Columns != null )
                 throw new Exception("No columns or too much primary key");
 
             if(Columns != null && Columns.Where(c=> c.IsPrimaryKey && c.IsForeignKey).Count() > 0)
                 throw new Exception("A key cannot be a primary and a foreign key");
 
             string sql = string.Empty ;
-            var col = GetPrimaryKey();
-            if (isSensitive == true)
+            var cols = GetPrimaryKey();
+            if (cols != null && cols.Length > 0)
             {
-                sql = $"ALTER TABLE \"{Name}\"";
-                if (col != null)
-                    sql += $" ADD CONSTRAINT {this.Name.Substring(0, 3)}_pk  PRIMARY KEY ( \"{col.Name}\" ); \n";
+                sql = $"\n ALTER TABLE [{Name}] ADD CONSTRAINT " + this.Name.Substring(0, 3) + "_pk  PRIMARY KEY (";
+                for (int i = 0; i < cols.Length; i++)
+                {
+                    if (isSensitive == true)
+                    {
+                        sql += $" \"{cols[i].Name}\"";
+                    }
+                    else
+                    {
+                        sql += cols[i].Name;
+                    }
+                    if (i < cols.Length - 1)
+                        sql += ",";
+                }
+                sql = ");";
             }
-            else
-            {
-                sql = $"ALTER TABLE {Name}";
-                if (col != null)
-                    sql += "ADD CONSTRAINT " + this.Name.Substring(0, 3) + "_pk  PRIMARY KEY (" + col.Name + "); \n";
-            }
+            
                 
             foreach(var c in  Columns.Where(co => co.IsForeignKey))
             {
@@ -88,25 +95,33 @@ namespace WebBossModellerSqlGenerator.Models
             return sql;
         }
 
-        public DbColumn? GetPrimaryKey()
+        public DbColumn[] GetPrimaryKey()
         {
-            return Columns.Where(col => col.IsPrimaryKey == true).SingleOrDefault();
+            return Columns.Where(col => col.IsPrimaryKey == true).ToArray();
         }
 
         public string AddContrainstsMSSQL()
         {
-            if (Columns != null && Columns.Where(c => c.IsPrimaryKey == true).Count() > 1)
+            if (Columns != null )
                 throw new Exception($"No columns or too much primary key ");
 
             if (Columns != null && Columns.Where(c => c.IsPrimaryKey == true && c.IsForeignKey == true).Count() > 0)
                 throw new Exception("A key cannot be a primary and a foreign key");
 
             string sql = string.Empty;
-            var col = GetPrimaryKey();
-           
-            sql = $"\n ALTER TABLE [{Name}] ";
-            if (col != null)
-                sql += "ADD CONSTRAINT " + this.Name.Substring(0, 3) + "_pk  PRIMARY KEY ([" + col.Name + "]); \n";
+            var cols = GetPrimaryKey();
+            if(cols!= null && cols.Length > 0)
+            {
+                sql = $"\n ALTER TABLE [{Name}] ADD CONSTRAINT " + this.Name.Substring(0, 3) + "_pk  PRIMARY KEY (";
+                for(int i=0; i<cols.Length;i++)
+                {
+                    sql += "[" + cols[i].Name + "]";
+                    if(i<cols.Length-1)
+                        sql += ",";
+                }
+                sql = ");";
+            }
+            
            
             foreach (var c in Columns.Where(co => co.IsForeignKey))
             {
@@ -118,18 +133,26 @@ namespace WebBossModellerSqlGenerator.Models
 
         public string AddContrainstsMySQL()
         {
-            if (Columns != null || Columns.Where(c => c.IsPrimaryKey).Count() > 1)
+            if (Columns != null )
                 throw new Exception("No columns or too much primary key");
 
             if (Columns != null && Columns.Where(c => c.IsPrimaryKey && c.IsForeignKey).Count() > 0)
                 throw new Exception("A key cannot be a primary and a foreign key");
 
             string sql = string.Empty;
-            var col = GetPrimaryKey();
+            var cols = GetPrimaryKey();
 
-            sql = $"ALTER TABLE {Name}";
-            if (col != null)
-                sql += "ADD CONSTRAINT " + this.Name.Substring(0, 3) + "_pk  PRIMARY KEY (" + col.Name + "); \n";
+            if (cols != null && cols.Length > 0)
+            {
+                sql = $"\n ALTER TABLE [{Name}] ADD CONSTRAINT " + this.Name.Substring(0, 3) + "_pk  PRIMARY KEY (";
+                for (int i = 0; i < cols.Length; i++)
+                {
+                    sql +=  cols[i].Name;
+                    if (i < cols.Length - 1)
+                        sql += ",";
+                }
+                sql = ");";
+            }
 
             foreach (var c in Columns.Where(co => co.IsForeignKey))
             {
