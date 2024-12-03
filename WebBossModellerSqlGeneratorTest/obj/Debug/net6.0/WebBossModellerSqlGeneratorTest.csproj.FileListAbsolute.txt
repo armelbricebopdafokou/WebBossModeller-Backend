@@ -113,3 +113,5 @@ D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGeneratorTest\o
 D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGeneratorTest\bin\Debug\net6.0\Microsoft.AspNetCore.JsonPatch.dll
 D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGeneratorTest\bin\Debug\net6.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGeneratorTest\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll
+D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGeneratorTest\bin\Debug\net6.0\gfoidl.Base64.dll
+D:\BO\sopra\myteil\WebBossModellerSqlGenerator\WebBossModellerSqlGeneratorTest\bin\Debug\net6.0\JsonWebToken.dll
