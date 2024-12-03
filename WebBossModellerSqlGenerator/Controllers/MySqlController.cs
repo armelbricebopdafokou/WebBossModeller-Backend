@@ -6,51 +6,45 @@ using WebBossModellerSqlGenerator.Models;
 
 namespace WebBossModellerSqlGenerator.Controllers
 {
-    [Route("[controller]/[action]")]
-    [ApiController]
-    public class PostgresSQLController : ControllerBase
+    public class MySqlController : Controller
     {
-        public PostgresSQLController()
+
+        public MySqlController()
         {
-           
         }
 
         [HttpGet]
-        public async Task<IActionResult> CreateDatabase(string dbName, bool isCaseSensitive = false)
+        public async Task<IActionResult> CreateDatabase(string dbName)
         {
             if (string.IsNullOrWhiteSpace(dbName))
                 return BadRequest("Parameter Name is missing");
             DbDatabase db = new DbDatabase(dbName);
 
-            return Ok(JsonConvert.SerializeObject(db.ToSqlForPostgresSQL(isCaseSensitive)));
+            return Ok(JsonConvert.SerializeObject(db.ToSqlForMySQL()));
         }
 
         [HttpGet]
-        public async Task<IActionResult> CreateSchema(string dbSchema, bool isCaseSensitive=false)
+        public async Task<IActionResult> CreateSchema(string dbSchema)
         {
             if (string.IsNullOrWhiteSpace(dbSchema))
                 return BadRequest("Parameter Name is missing");
             DbSchema db = new DbSchema(dbSchema);
 
-            return Ok(JsonConvert.SerializeObject(db.ToSqlForPostgresSQL(isCaseSensitive)));
+            return Ok(JsonConvert.SerializeObject(db.ToSqlForMySQL()));
         }
 
         [HttpPost]
-        public async Task<IActionResult> GenerateSqlForGraphic([FromBody]GraphicDTO graphicDTO)
+        public async Task<IActionResult> GenerateSqlForGraphic([FromBody] GraphicDTO graphicDTO)
         {
-            bool isCaseSensitive= graphicDTO.IsCaseSensitive;
             StringBuilder sb = new StringBuilder();
             DbDatabase dbDatabase = new DbDatabase(graphicDTO.DatabaseName);
-            sb.Append(dbDatabase.ToSqlForPostgresSQL(isCaseSensitive));
+            sb.Append(dbDatabase.ToSqlForMySQL());
+            sb.Append("USE [" + dbDatabase.Name + "];\n ");
             DbSchema dbSchema = new DbSchema(graphicDTO.SchemaName);
-            sb.Append(dbSchema.ToSqlForPostgresSQL(isCaseSensitive));
-            if (isCaseSensitive == true)
-                sb.Append("SET search_path TO \"" + dbSchema.Name + "\" \n");
-            else
-                sb.Append("SET search_path TO " + dbSchema.Name + "\n");
+            sb.Append(dbSchema.ToSqlForMySQL());
+
             foreach (var elt in graphicDTO.tables)
             {
-                // sb.Append(elt.ToSqlForPostgresSQL(isCaseSensitive));
                 DbTable table = new DbTable()
                 {
                     Name = elt.Name,
@@ -72,11 +66,11 @@ namespace WebBossModellerSqlGenerator.Controllers
                     table.Columns.Add(column);
                 }
 
-                sb.Append(table.ToSqlForPostgresSQL(isCaseSensitive) + "\n");
-                sb.Append(table.AddContrainstsPostgres(isCaseSensitive) + "\n");
+                sb.Append(table.ToSqlForMySQL() + "\n");
+                sb.Append(table.AddContrainstsMySQL() + "\n");
             }
+
             return Ok(sb.ToString());
         }
-
     }
 }
