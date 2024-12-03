@@ -7,7 +7,7 @@ namespace WebBossModellerSqlGenerator.Models
         public string Name { get; init; }
         public bool IsWeak { get; init; }
         public List<DbColumn> Columns { get; set; }
-
+        public List<DbColumn> UniqueCombination { get; private set; } = new List<DbColumn>();
         public DbSchema? Schema { get; init; }
 
       
@@ -22,7 +22,10 @@ namespace WebBossModellerSqlGenerator.Models
             sql += ");";
             return sql ;
         }
-
+        public void AddUniqueCombination(params DbColumn[] columns)
+        {
+            this.UniqueCombination = columns.Distinct().ToList();
+        }
         public string ToSqlForMySQL()
         {
             var sql = $"CREATE {Name} ({Environment.NewLine}";
@@ -38,9 +41,9 @@ namespace WebBossModellerSqlGenerator.Models
         {
             string sql=string.Empty ;
             if(isCaseSensitive)
-                sql = $"CREATE  \"{Schema.Name}\".\"{Name}\" ({Environment.NewLine}";
+                sql = $"CREATE TABLE  \"{Name}\" ({Environment.NewLine}";
             else
-                sql = $"CREATE {Schema.Name}.{Name} ({Environment.NewLine}";
+                sql = $"CREATE TABLE {Name} ({Environment.NewLine}";
 
 
             foreach (var col in Columns)
@@ -53,64 +56,142 @@ namespace WebBossModellerSqlGenerator.Models
 
         public string AddContrainstsPostgres(bool isSensitive=false)
         {
-            if (Columns != null && Columns.Where(c => c.IsPrimaryKey).Count() > 1)
-                throw new Exception("No columns or too much primary key");
+            if (Columns == null )
+                throw new Exception("No columns or to key");
 
             if(Columns != null && Columns.Where(c=> c.IsPrimaryKey && c.IsForeignKey).Count() > 0)
                 throw new Exception("A key cannot be a primary and a foreign key");
 
             string sql = string.Empty ;
-            var col = GetPrimaryKey();
-            if (isSensitive == true)
+            var cols = GetPrimaryKey();
+            if (cols != null && cols.Length > 0)
             {
-                sql = $"ALTER TABLE \"{Name}\"";
-                if (col != null)
-                    sql += $" ADD CONSTRAINT {this.Name.Substring(0, 3)}_pk  PRIMARY KEY ( \"{col.Name}\" ); \n";
+                sql = $"\n ALTER TABLE [{Name}] ADD CONSTRAINT " + this.Name.Substring(0, 3) + "_pk  PRIMARY KEY (";
+                for (int i = 0; i < cols.Length; i++)
+                {
+                    if (isSensitive == true)
+                    {
+                        sql += $" \"{cols[i].Name}\"";
+                    }
+                    else
+                    {
+                        sql += cols[i].Name;
+                    }
+                    if (i < cols.Length - 1)
+                        sql += ",";
+                }
+                sql = ");";
             }
-            else
-            {
-                sql = $"ALTER TABLE {Name}";
-                if (col != null)
-                    sql += "ADD CONSTRAINT " + this.Name.Substring(0, 3) + "_pk  PRIMARY KEY (" + col.Name + "); \n";
-            }
-                
-            foreach(var c in  Columns.Where(co => co.IsForeignKey))
+            if(UniqueCombination.Count() > 0)
             {
                 if(isSensitive == true)
                 {
-                    sql += $" ALTER TABLE ADD CONSTRAINT {this.Name.Substring(0, 3)}_{c.ReferenceTable.Name.Substring(0, 3)}_fk FOREIGN KEY (\"{c.Name}\") REFERENCES \"{c.ReferenceTable.Name}\" (\"{c.ReferenceTable.GetPrimaryKey()}\"); \n ";
+                    sql += $"\n ALTER TABLE \"{this.Name}\"  ADD CONSTRAINT {UniqueCombination[0].Name.Substring(0, 2)}_uniq (";
+                    for (short i = 0; i < UniqueCombination.Count; i++)
+                    {
+                        if (i == UniqueCombination.Count - 1)
+                        {
+                            sql += $"\"{UniqueCombination[i].Name}\"";
+                        }
+                        else
+                        {
+                            sql += $"\"{UniqueCombination[i].Name}\",";
+                        }
+                    }
                 }
                 else
                 {
-                    sql += $" ALTER TABLE ADD CONSTRAINT {this.Name.Substring(0, 3)}_{c.ReferenceTable.Name.Substring(0, 3)}_fk FOREIGN KEY ({c.Name}) REFERENCES {c.ReferenceTable.Name} ({c.ReferenceTable.GetPrimaryKey()}); \n";
+                    sql += $"\n ALTER TABLE {this.Name}  ADD CONSTRAINT {UniqueCombination[0].Name.Substring(0, 2)}_uniq (";
+                    for (short i = 0; i < UniqueCombination.Count; i++)
+                    {
+                        if (i == UniqueCombination.Count - 1)
+                        {
+                            sql += $"{UniqueCombination[i].Name}";
+                        }
+                        else
+                        {
+                            sql += $"{UniqueCombination[i].Name},";
+                        }
+                    }
+                }
+               
+                sql += ");";
+            }
+           
+
+            foreach (var c in  Columns.Where(co => co.IsForeignKey))
+            {
+                if(isSensitive == true)
+                {
+                    sql += $" ALTER TABLE {this.Name} ADD CONSTRAINT {this.Name.Substring(0, 3)}_{c.ReferenceTable.Name.Substring(0, 3)}_fk FOREIGN KEY (\"{c.Name}\") REFERENCES \"{c.ReferenceTable.Name}\" (\"{c.ReferenceTable.GetPrimaryKey()}\"); \n ";
+                }
+                else
+                {
+                    sql += $" ALTER TABLE {this.Name} ADD CONSTRAINT {this.Name.Substring(0, 3)}_{c.ReferenceTable.Name.Substring(0, 3)}_fk FOREIGN KEY ({c.Name}) REFERENCES {c.ReferenceTable.Name} ({c.ReferenceTable.GetPrimaryKey()}); \n";
                 }
             }
             return sql;
         }
 
-        public DbColumn? GetPrimaryKey()
+        public DbColumn[] GetPrimaryKey()
         {
-            return Columns.Where(col => col.IsPrimaryKey == true).SingleOrDefault();
+            List<DbColumn> list = new List<DbColumn>();
+            foreach (var primary in Columns)
+            {
+                if (primary.IsPrimaryKey == true && primary.IsNull == true)
+                {
+                    throw new Exception("A primary key must not be null");
+                }
+                else if (primary.IsPrimaryKey == true)
+                {
+                    list.Add(primary);
+                }
+            }
+            return list.ToArray();
         }
 
         public string AddContrainstsMSSQL()
         {
-            if (Columns != null && Columns.Where(c => c.IsPrimaryKey == true).Count() > 1)
-                throw new Exception($"No columns or too much primary key ");
+            if (Columns == null )
+                throw new Exception($"No columns ");
 
             if (Columns != null && Columns.Where(c => c.IsPrimaryKey == true && c.IsForeignKey == true).Count() > 0)
                 throw new Exception("A key cannot be a primary and a foreign key");
 
             string sql = string.Empty;
-            var col = GetPrimaryKey();
-           
-            sql = $"\n ALTER TABLE [{Name}] ";
-            if (col != null)
-                sql += "ADD CONSTRAINT " + this.Name.Substring(0, 3) + "_pk  PRIMARY KEY ([" + col.Name + "]); \n";
-           
+            var cols = GetPrimaryKey();
+            if(cols!= null && cols.Length > 0)
+            {
+                sql = $"\n ALTER TABLE [{Name}] ADD CONSTRAINT " + this.Name.Substring(0, 3) + "_pk  PRIMARY KEY (";
+                for(int i=0; i<cols.Length;i++)
+                {
+                    sql += "[" + cols[i].Name + "]";
+                    if(i<cols.Length-1)
+                        sql += ",";
+                }
+                sql = ");";
+            }
+
+            if (UniqueCombination.Count > 0)
+            {
+                sql += $"\n ALTER TABLE [{this.Name}]  ADD CONSTRAINT {UniqueCombination[0].Name.Substring(0, 2)}_uniq (";
+                for (short i = 0; i < UniqueCombination.Count; i++)
+                {
+                    if (i == UniqueCombination.Count - 1)
+                    {
+                        sql += $"{UniqueCombination[i].Name}";
+                    }
+                    else
+                    {
+                        sql += $"{UniqueCombination[i].Name},";
+                    }
+                }
+                sql += ");";
+            }
+
             foreach (var c in Columns.Where(co => co.IsForeignKey))
             {
-                 sql += $"\n ALTER TABLE ADD CONSTRAINT {this.Name.Substring(0,3)}_{c.ReferenceTable.Name.Substring(0,3)}_fk  FOREIGN KEY ([{c.Name}]) REFERENCES [{c.ReferenceTable.Name}] ([{c.ReferenceTable.GetPrimaryKey()}]); \n";
+                 sql += $"\n ALTER TABLE {this.Name} ADD CONSTRAINT {this.Name.Substring(0,3)}_{c.ReferenceTable.Name.Substring(0,3)}_fk  FOREIGN KEY ([{c.Name}]) REFERENCES [{c.ReferenceTable.Name}] ([{c.ReferenceTable.GetPrimaryKey()}]); \n";
             }
 
             return sql ;
@@ -118,22 +199,48 @@ namespace WebBossModellerSqlGenerator.Models
 
         public string AddContrainstsMySQL()
         {
-            if (Columns != null || Columns.Where(c => c.IsPrimaryKey).Count() > 1)
-                throw new Exception("No columns or too much primary key");
+            if (Columns == null )
+                throw new Exception("No columns ");
 
             if (Columns != null && Columns.Where(c => c.IsPrimaryKey && c.IsForeignKey).Count() > 0)
                 throw new Exception("A key cannot be a primary and a foreign key");
 
             string sql = string.Empty;
-            var col = GetPrimaryKey();
+            var cols = GetPrimaryKey();
 
-            sql = $"ALTER TABLE {Name}";
-            if (col != null)
-                sql += "ADD CONSTRAINT " + this.Name.Substring(0, 3) + "_pk  PRIMARY KEY (" + col.Name + "); \n";
+            if (cols != null && cols.Length > 0)
+            {
+                sql = $"\n ALTER TABLE {Name} ADD CONSTRAINT " + this.Name.Substring(0, 3) + "_pk  PRIMARY KEY (";
+                for (int i = 0; i < cols.Length; i++)
+                {
+                    sql +=  cols[i].Name;
+                    if (i < cols.Length - 1)
+                        sql += ",";
+                }
+                sql = ");";
+            }
+
+            if (UniqueCombination.Count > 0)
+            {
+                sql += $"\n ALTER TABLE {this.Name}  ADD CONSTRAINT {UniqueCombination[0].Name.Substring(0, 2)}_uniq (";
+                for (short i = 0; i < UniqueCombination.Count; i++)
+                {
+                    if (i == UniqueCombination.Count - 1)
+                    {
+                        sql += $"{UniqueCombination[i].Name}";
+                    }
+                    else
+                    {
+                        sql += $"{UniqueCombination[i].Name},";
+                    }
+                }
+                sql += ");";
+            }
+           
 
             foreach (var c in Columns.Where(co => co.IsForeignKey))
             {
-                sql += $"ALTER TABLE ADD CONSTRAINT {this.Name.Substring(0, 3)}_{c.ReferenceTable.Name.Substring(0, 3)}_fk  FOREIGN KEY ({c.Name}) REFERENCES {c.ReferenceTable.Name} ({c.ReferenceTable.GetPrimaryKey()}); \n";
+                sql += $"ALTER TABLE {this.Name}  ADD CONSTRAINT {this.Name.Substring(0, 3)}_{c.ReferenceTable.Name.Substring(0, 3)}_fk  FOREIGN KEY ({c.Name}) REFERENCES {c.ReferenceTable.Name} ({c.ReferenceTable.GetPrimaryKey()}); \n";
             }
 
             return sql;

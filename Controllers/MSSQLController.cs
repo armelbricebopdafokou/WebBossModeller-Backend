@@ -7,7 +7,7 @@ using WebBossModellerSqlGenerator.Models;
 
 namespace WebBossModellerSqlGenerator.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("[controller]/[action]")]
     [ApiController]
     public class MSSQLController : ControllerBase
     {
@@ -18,7 +18,7 @@ namespace WebBossModellerSqlGenerator.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CreateDatabase(string dbName)
+        public ActionResult CreateDatabase(string dbName)
         {
             if (string.IsNullOrWhiteSpace(dbName))
                 return BadRequest("Parameter Name is missing");
@@ -28,7 +28,7 @@ namespace WebBossModellerSqlGenerator.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CreateSchema(string dbSchema)
+        public IActionResult CreateSchema(string dbSchema)
         {
             if (string.IsNullOrWhiteSpace(dbSchema))
                 return BadRequest("Parameter Name is missing");
@@ -38,7 +38,7 @@ namespace WebBossModellerSqlGenerator.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GenerateSqlForGraphic([FromBody]GraphicDTO graphicDTO)
+        public  ActionResult<string> GenerateSqlForGraphic([FromBody]GraphicDTO graphicDTO)
         {
             StringBuilder sb = new StringBuilder();
             DbDatabase dbDatabase = new DbDatabase(graphicDTO.DatabaseName);

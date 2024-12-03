@@ -2,7 +2,7 @@
   {
     "ContainingType": "WebBossModellerSqlGenerator.Controllers.MSSQLController",
     "Method": "CreateDatabase",
-    "RelativePath": "api/MSSQL/CreateDatabase",
+    "RelativePath": "MSSQL/CreateDatabase",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -18,7 +18,7 @@
   {
     "ContainingType": "WebBossModellerSqlGenerator.Controllers.MSSQLController",
     "Method": "CreateSchema",
-    "RelativePath": "api/MSSQL/CreateSchema",
+    "RelativePath": "MSSQL/CreateSchema",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -34,7 +34,7 @@
   {
     "ContainingType": "WebBossModellerSqlGenerator.Controllers.MSSQLController",
     "Method": "GenerateSqlForGraphic",
-    "RelativePath": "api/MSSQL/GenerateSqlForGraphic",
+    "RelativePath": "MSSQL/GenerateSqlForGraphic",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -45,12 +45,22 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "WebBossModellerSqlGenerator.Controllers.PostgresSQLController",
     "Method": "CreateDatabase",
-    "RelativePath": "api/PostgresSQL/CreateDatabase",
+    "RelativePath": "PostgresSQL/CreateDatabase",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -66,12 +76,22 @@
         "IsRequired": false
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "WebBossModellerSqlGenerator.Controllers.PostgresSQLController",
     "Method": "CreateSchema",
-    "RelativePath": "api/PostgresSQL/CreateSchema",
+    "RelativePath": "PostgresSQL/CreateSchema",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -87,12 +107,22 @@
         "IsRequired": false
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "WebBossModellerSqlGenerator.Controllers.PostgresSQLController",
     "Method": "GenerateSqlForGraphic",
-    "RelativePath": "api/PostgresSQL/GenerateSqlForGraphic",
+    "RelativePath": "PostgresSQL/GenerateSqlForGraphic",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -103,7 +133,17 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "WebBossModellerSqlGenerator.Controllers.WeatherForecastController",
