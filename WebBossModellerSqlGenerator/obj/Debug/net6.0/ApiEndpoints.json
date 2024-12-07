@@ -1,0 +1,169 @@
+[
+  {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.MSSQLController",
+    "Method": "CreateDatabase",
+    "RelativePath": "MSSQL/CreateDatabase",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dbName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.MSSQLController",
+    "Method": "CreateSchema",
+    "RelativePath": "MSSQL/CreateSchema",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dbSchema",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.MSSQLController",
+    "Method": "GenerateSqlForGraphic",
+    "RelativePath": "MSSQL/GenerateSqlForGraphic",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "graphicDTO",
+        "Type": "WebBossModellerSqlGenerator.DTO.GraphicDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.PostgresSQLController",
+    "Method": "CreateDatabase",
+    "RelativePath": "PostgresSQL/CreateDatabase",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dbName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "isCaseSensitive",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.PostgresSQLController",
+    "Method": "CreateSchema",
+    "RelativePath": "PostgresSQL/CreateSchema",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dbSchema",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "isCaseSensitive",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.PostgresSQLController",
+    "Method": "GenerateSqlForGraphic",
+    "RelativePath": "PostgresSQL/GenerateSqlForGraphic",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "graphicDTO",
+        "Type": "WebBossModellerSqlGenerator.DTO.GraphicDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.WeatherForecastController",
+    "Method": "Get",
+    "RelativePath": "WeatherForecast",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[WebBossModellerSqlGenerator.WeatherForecast, WebBossModellerSqlGenerator, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "EndpointName": "GetWeatherForecast"
+  }
+]

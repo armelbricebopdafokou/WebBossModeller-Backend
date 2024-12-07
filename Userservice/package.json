@@ -25,6 +25,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.8.0",
     "nodemon": "^3.1.7",
+    "passport": "^0.7.0",
     "passport-ldapauth": "^3.0.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.3",
