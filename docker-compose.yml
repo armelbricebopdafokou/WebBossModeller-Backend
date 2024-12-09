@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   user:
+    container_name: user
     build:
       context: ./Userservice
       dockerfile: Dockerfile
@@ -12,11 +13,20 @@ services:
     environment:
       - NODE_ENV=production
     labels:
-      -  traefik.enable=true
-      -  traefik.http.routers.users-http.rule=Host(`localhost`) && PathPrefix(`/users`)
-      -  traefik.http.routers.users-http.entrypoints=web
+      -  "traefik.enable=true"
+      -  "traefik.http.routers.users.rule=PathPrefix(`/users`)"
+      -  "traefik.http.routers.users.entrypoints=customport"
+      -  "traefik.http.services.users.loadbalancer.server.port=8083"
+      -  "traefik.docker.network=web"
+      -  "traefik.http.middlewares.users-stripprefix.stripprefix.prefixes=/users"
+      -  "traefik.http.routers.users.middlewares=users-stripprefix"
+
+    networks:
+      - web
+
 
   sql:
+    container_name: sql
     build:
       context: ./WebBossModellerSqlGenerator
       dockerfile: Dockerfile
@@ -27,19 +37,38 @@ services:
     depends_on:
       - traefik
     labels:
-      - traefik.enable=true
-      - traefik.http.routers.sql-http.rule=Host(`localhost`) && PathPrefix(`/sql`)
-      - traefik.http.routers.sql-http.entrypoints=web
+      - "traefik.enable=true"
+      - "traefik.http.routers.sql.rule=PathPrefix(`/sql`)"
+      - "traefik.http.routers.sql.entrypoints=customport"
+      - "traefik.http.services.sql.loadbalancer.server.port=8085"
+      - "traefik.docker.network=web"
+      - "traefik.http.middlewares.sql-stripprefix.stripprefix.prefixes=/sql"
+      - "traefik.http.routers.sql.middlewares=sql-stripprefix"
+
       #-  "traefik.http.routers.user.rule=Host(`app`) && PathPrefix(`sql`)"
+    networks:
+      - web
+
+  
   traefik: #reverse proxy
     image: traefik:v3.2
-    command:  --api.insecure=true --providers.docker
+    container_name: traefik
+    command:
+      - "--api.insecure=true" # Expose Traefik Dashboard for development
+      - "--log.level=DEBUG"
+      - "--providers.docker=true" # Enable Docker provider
+      - "--entrypoints.customport.address=:82" # Define the new entrypoint for port 82
     ports:
       # The HTTP port
       - "82:82"
       # The Web UI (enabled by --api.insecure=true)
-      - "8082:8082"
+      - "8080:8080"
     volumes:
       # So that Traefik can listen to the Docker events
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./traefik.yml:/etc/traefik/traefik.yml:ro
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - web
+
+networks:
+  web:
+    external: true

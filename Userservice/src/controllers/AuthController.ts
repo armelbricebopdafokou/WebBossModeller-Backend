@@ -21,11 +21,9 @@ const cookieOptions = {
 // LDAP Configuration
 const LDAP_OPTS = {
     server: {
-      url: config.LDAP_URL,
-      bindDN: 'cn=admin,dc=example,dc=com',
-      bindCredentials: 'admin_password',
-      searchBase: 'dc=example,dc=com',
-      searchFilter: '(uid={{username}})'
+        url: 'ldaps://ods0.hs-bochum.de:636',
+        searchBase: 'o=hs-bochum.de,o=isp',
+        searchFilter: '(uid={{username}})',
     }
   };
 
@@ -124,6 +122,35 @@ const login = async(req: Request, res: Response) =>{
 
 };
 
+const loginLDAP = async(req: Request, res: Response) =>{
+    
+    try {
+       // Extract username and password from the request
+        const { username, password } = req.body;
+        if (!username || !password) {
+             res.status(400).json({ message: 'Username and password are required' });
+          }
+          // Try LDAP Authentication
+          passport.authenticate('ldapauth', { session: false }, async(err: any, user: any, info: any) => {
+            if (err) return res.status(500).json({ message: 'LDAP error', error: err });
+        
+            if (user) {
+              // LDAP Success: Issue JWT Token
+              const token = await createSendToken(user!, res);
+    
+              return res.json({ status: 200, message: 'Authenticated via LDAP', token, user });
+            }
 
+        })(req, res);
 
-export default { register, login};
+    } catch (error: any) {
+        
+         res.json({
+            status: 500,
+            message: error.message,
+        });
+    }
+
+};
+
+export default { register, login, loginLDAP};
