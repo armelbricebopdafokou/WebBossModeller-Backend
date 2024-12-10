@@ -10,15 +10,15 @@ app.use(express.urlencoded({extended: true}));
 
 
 
-const auth = proxy("http://localhost:8085")
-const sqlGenerator = proxy("https://localhost:7077");
+const auth = proxy("http://localhost:8083")
+const sqlGenerator = proxy("http://localhost:8085");
 //process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-app.use("/api/users",auth );
-app.use("/api/sql", sqlGenerator);
+app.use("/users",auth );
+app.use("/sql", sqlGenerator);
 
 
 
-const server=app.listen(8082, ()=>{
+const server=app.listen(82, ()=>{
     console.log("Gateway is Listening to Port 8082");
 });
 

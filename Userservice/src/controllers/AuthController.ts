@@ -80,21 +80,10 @@ const login = async(req: Request, res: Response) =>{
     try {
        // Extract username and password from the request
         const { username, password } = req.body;
+        console.log(username, password);
         if (!username || !password) {
              res.status(400).json({ message: 'Username and password are required' });
           }
-          // Try LDAP Authentication
-          passport.authenticate('ldapauth', { session: false }, async(err: any, user: any, info: any) => {
-            if (err) return res.status(500).json({ message: 'LDAP error', error: err });
-        
-            if (user) {
-              // LDAP Success: Issue JWT Token
-              const token = await createSendToken(user!, res);
-    
-              return res.json({ status: 200, message: 'Authenticated via LDAP', token, user });
-            }
-
-        })(req, res);
 
         const user = await User.findOne({email:username}).select("+password");
 
