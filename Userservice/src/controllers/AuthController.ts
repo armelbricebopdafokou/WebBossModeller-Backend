@@ -4,6 +4,7 @@ import { User } from "../database";
 import config from "../config/config";
 import { IUser } from "../database";
 import passport from 'passport';
+const ldap = require('ldapjs');
 import {ApiError, encryptPassword, isPasswordMatch} from "../utils";
 
 const jwtSecret = config.JWT_SECRET as string;
@@ -22,8 +23,7 @@ const cookieOptions = {
 const LDAP_OPTS = {
     server: {
         url: 'ldaps://ods0.hs-bochum.de:636',
-        searchBase: 'o=hs-bochum.de,o=isp',
-        searchFilter: '(uid={{username}})',
+        searchBase: 'ou=People,o=hs-bochum.de,o=isp',
     }
   };
 
@@ -78,9 +78,10 @@ const createSendToken = async (user:IUser, res: Response)=>{
 const login = async(req: Request, res: Response) =>{
     
     try {
+        
        // Extract username and password from the request
         const { username, password } = req.body;
-        console.log(username, password);
+        
         if (!username || !password) {
              res.status(400).json({ message: 'Username and password are required' });
           }
@@ -98,48 +99,68 @@ const login = async(req: Request, res: Response) =>{
             res.json({
             status: 200,
             message:"User logged in successfully!",
-            token
+            token: token
         })
         
     } catch (error: any) {
         
-         res.json({
-            status: 500,
-            message: error.message,
+         res.status(500).json({
+            message: error.message
         });
     }
 
+};
+
+const sldapTest = async (kennung: string, password: string): Promise<boolean> => {
+    if (!kennung || !password) return false;
+
+    const ldaprdn = `uid=${kennung},${LDAP_OPTS.server.searchBase}`;
+    const client = ldap.createClient({
+        url: LDAP_OPTS.server.url,
+    });
+
+    return new Promise((resolve, reject) => {
+        client.bind(ldaprdn, password, (err: any) => {
+            if (err) {
+                console.error('Failed to bind:', err.message);
+                client.unbind();
+                resolve(false);
+            } else {
+                console.log('LDAP bind successful');
+                client.unbind();
+                resolve(true);
+            }
+        });
+    });
 };
 
 const loginLDAP = async(req: Request, res: Response) =>{
     
     try {
+        const client = ldap.createClient({
+            url: LDAP_OPTS.server.url,
+        });
        // Extract username and password from the request
         const { username, password } = req.body;
+        
         if (!username || !password) {
              res.status(400).json({ message: 'Username and password are required' });
           }
           // Try LDAP Authentication
-          passport.authenticate('ldapauth', { session: false }, async(err: any, user: any, info: any) => {
-            if (err) return res.status(500).json({ message: 'LDAP error', error: err });
-        
-            if (user) {
-              // LDAP Success: Issue JWT Token
-              const token = await createSendToken(user!, res);
-    
-              return res.json({ status: 200, message: 'Authenticated via LDAP', token, user });
-            }
+          const isAuthenticated = await sldapTest(username, password);
 
-        })(req, res);
-
-    } catch (error: any) {
-        
-         res.json({
-            status: 500,
-            message: error.message,
-        });
-    }
-
-};
+          if (isAuthenticated) {
+              console.log('Authentication successful!');
+              // Issue JWT Token or perform other actions upon successful authentication
+              const token = await createSendToken(username, res);
+              return res.json({ status: 200, message: 'Authenticated via LDAP', token, user: username });
+          } else {
+              return res.status(401).json({ message: 'Invalid username or password' });
+          }
+      } catch (err) {
+          console.error('LDAP error:', err);
+          return res.status(500).json({ message: 'LDAP error', error: err });
+      }
+    };
 
 export default { register, login, loginLDAP};

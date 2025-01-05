@@ -6,14 +6,25 @@ import {ApiError} from "../utils";
 
 const saveGraphics = async(req: Request, res: Response) =>{
     try {
+       
         let {email, graphics} = req.body
         //console.log(graphics)
         const userExists = await User.updateOne({email:email}, {$set:{graphics:graphics}});
-         res.json({
-            status:200,
-            message:"Graphic saved",
-            data: userExists
-        })
+        console.log(userExists)
+        if (userExists)
+        {
+            res.json({
+                status:200,
+                message:"Graphic saved",
+                data: userExists
+            })
+        }
+        else{
+            res.json({
+                status:500,
+                message:"Update failed",
+            })
+        }
     
     } catch (error: any) {
          res.json({

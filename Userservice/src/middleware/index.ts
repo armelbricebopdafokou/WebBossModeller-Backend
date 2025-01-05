@@ -61,12 +61,12 @@ export const authMiddleware = async (
         return next(new ApiError(401, "Missing authorization header"));
     }
     
-    const [, token] = authHeader.split(" ");
+    //const [, token] = authHeader.split(" ");
     
     try {
        
-        const decoded = jwt.verify(token, jwtSecret) as TokenPayload;
-       
+        const decoded = jwt.verify(authHeader, jwtSecret) as TokenPayload;
+        req.body.email = decoded.email
         if(!decoded.exp || decoded.exp == 0) return next(new ApiError(401, "Token has been expired"));
         
         return next();
