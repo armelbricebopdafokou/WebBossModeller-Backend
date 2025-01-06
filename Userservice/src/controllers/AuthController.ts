@@ -153,13 +153,13 @@ const loginLDAP = async(req: Request, res: Response) =>{
               console.log('Authentication successful!');
               // Issue JWT Token or perform other actions upon successful authentication
               const token = await createSendToken(username, res);
-              return res.json({ status: 200, message: 'Authenticated via LDAP', token, user: username });
+               res.json({ status: 200, message: 'Authenticated via LDAP', token, user: username });
           } else {
-              return res.status(401).json({ message: 'Invalid username or password' });
+               res.status(401).json({ message: 'Invalid username or password' });
           }
       } catch (err) {
           console.error('LDAP error:', err);
-          return res.status(500).json({ message: 'LDAP error', error: err });
+           res.status(500).json({ message: 'LDAP error', error: err });
       }
     };
 

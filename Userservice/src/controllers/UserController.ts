@@ -9,7 +9,7 @@ const saveGraphics = async(req: Request, res: Response) =>{
        
         let {email, graphics} = req.body
         //console.log(graphics)
-        const userExists = await User.updateOne({email:email}, {$set:{graphics:graphics}});
+        const userExists = await User.updateOne({email:email}, {$push:{graphics:graphics}});
         console.log(userExists)
         if (userExists)
         {
