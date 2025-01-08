@@ -65,7 +65,7 @@ const register = async (req: Request, res: Response) =>{
 
 const createSendToken = async (user:IUser, res: Response)=>{
     const {lastName, firstName, email, id } = user;
-    const token = Jwt.sign({lastName, email, id}, jwtSecret, {
+    const token = Jwt.sign({lastName,firstName, email, id}, jwtSecret, {
         expiresIn: "1d"
     });
     if(config.env == "production") cookieOptions.secure = true;
@@ -73,6 +73,19 @@ const createSendToken = async (user:IUser, res: Response)=>{
     res.cookie("jwt", token, cookieOptions);
 
     return token;
+};
+
+const UserFromToken =  (token:any)=>{
+    try {
+        if(!token){
+            throw new ApiError(401, "No token provided")
+        }
+        let user = Jwt.verify(token, jwtSecret);
+        return user;    
+    }catch(error){
+        throw new ApiError(401, "Invalid token")
+    }
+     
 };
 
 const login = async(req: Request, res: Response) =>{
@@ -163,4 +176,4 @@ const loginLDAP = async(req: Request, res: Response) =>{
       }
     };
 
-export default { register, login, loginLDAP};
+export default { register, login, loginLDAP, UserFromToken};
