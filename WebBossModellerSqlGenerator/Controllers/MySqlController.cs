@@ -47,27 +47,27 @@ namespace WebBossModellerSqlGenerator.Controllers
             {
                 DbTable table = new DbTable()
                 {
-                    Name = elt.Name,
+                    Name = elt.ClassName,
                     Schema = dbSchema
                 };
 
                 table.Columns = new List<DbColumn>();
-                foreach (var col in elt.Columns)
+                foreach (var col in elt.Items)
                 {
                     DbColumn column = new DbColumn()
                     {
                         Name = col.Name,
                         Type = col.Type,
                         DefaultValue = col.DefaultValue,
-                        IsNull = col.IsNullable,
-                        IsPrimaryKey = col.IsPrimaryKey,
-                        IsUnique = col.IsUnique
+                        IsNull = !(col.NotNull??false),
+                        IsPrimaryKey = col.IsKey,
+                        IsUnique = col.IsUnique??false
                     };
                     table.Columns.Add(column);
                 }
 
                 sb.Append(table.ToSqlForMySQL() + "\n");
-                sb.Append(table.AddContrainstsMySQL() + "\n");
+                sb.Append(table.AddContrainstsMySQL() + "\n \n \n");
             }
 
             return Ok(sb.ToString());

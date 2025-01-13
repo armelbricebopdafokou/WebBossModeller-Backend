@@ -80,7 +80,7 @@ namespace WebBossModellerSqlGenerator.Models
                     if (i < cols.Length - 1)
                         sql += ",";
                 }
-                sql = ");";
+                sql += ");";
             }
             if(UniqueCombination.Count() > 0)
             {
@@ -169,7 +169,7 @@ namespace WebBossModellerSqlGenerator.Models
                     if(i<cols.Length-1)
                         sql += ",";
                 }
-                sql = ");";
+                sql += ");";
             }
 
             if (UniqueCombination.Count > 0)
@@ -217,7 +217,7 @@ namespace WebBossModellerSqlGenerator.Models
                     if (i < cols.Length - 1)
                         sql += ",";
                 }
-                sql = ");";
+                sql += ");";
             }
 
             if (UniqueCombination.Count > 0)

@@ -49,8 +49,8 @@
             else
                 sqlCreate = $"{Name}  {Type} ";
             if (IsUnique == true) sqlCreate += " UNIQUE ";
-            if (IsPrimaryKey == true)
-                sqlCreate += " PRIMARY KEY ";
+            //if (IsPrimaryKey == true)
+              //  sqlCreate += " PRIMARY KEY ";
             
 
             sqlCreate += NullAndDefault();

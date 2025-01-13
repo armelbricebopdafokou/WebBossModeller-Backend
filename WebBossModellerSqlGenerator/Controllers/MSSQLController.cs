@@ -40,41 +40,41 @@ namespace WebBossModellerSqlGenerator.Controllers
         [HttpPost]
         public  ActionResult<string> GenerateSqlForGraphic([FromBody]GraphicDTO graphicDTO)
         {
-            StringBuilder sb = new StringBuilder();
+            string sb = string.Empty;
             DbDatabase dbDatabase = new DbDatabase(graphicDTO.DatabaseName);
-            sb.Append(dbDatabase.ToSqlForMSSSQL());
-            sb.Append("USE [" + dbDatabase.Name + "];\n GO \n");
+            sb += dbDatabase.ToSqlForMSSSQL();
+            sb += "USE [" + dbDatabase.Name + "];\n GO \n";
             DbSchema dbSchema = new DbSchema(graphicDTO.SchemaName);
-            sb.Append(dbSchema.ToSqlForMSSSQL());
+            sb += dbSchema.ToSqlForMSSSQL();
             
             foreach(var elt in graphicDTO.tables)
             {
                 DbTable table = new DbTable()
                 {
-                    Name = elt.Name,
+                    Name = elt.ClassName,
                     Schema = dbSchema
                 };
                
                 table.Columns = new List<DbColumn>();
-                foreach(var col in elt.Columns)
+                foreach(var col in elt.Items)
                 {
                     DbColumn column = new DbColumn()
                     {
                         Name = col.Name,
                         Type = col.Type,
                         DefaultValue = col.DefaultValue,
-                        IsNull = col.IsNullable,
-                        IsPrimaryKey = col.IsPrimaryKey,
-                        IsUnique = col.IsUnique
+                        IsNull = !(col.NotNull??false),
+                        IsPrimaryKey = col.IsKey,
+                        IsUnique = col.IsUnique??false
                     };
                     table.Columns.Add(column);
                 }
                
-                sb.Append(table.ToSqlForMSSSQL() +"\n");
-                sb.Append(table.AddContrainstsMSSQL() + "\n");
+                sb += table.ToSqlForMSSSQL() +"\n";
+                sb += table.AddContrainstsMSSQL() + "\n \n \n";
             }
 
-            return Ok(sb.ToString() );
+            return Ok(sb );
         }
     }
 }
