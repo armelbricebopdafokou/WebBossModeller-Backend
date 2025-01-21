@@ -61,16 +61,10 @@ D:/BO/sopra/myteil/WebBossModellerSqlGenerator/WebBossModellerSqlGenerator/bin/D
 /home/runner/work/WebBossModeller-Backend/WebBossModeller-Backend/WebBossModellerSqlGenerator/obj/Debug/net6.0/WebBossModellerSqlGenerator.csproj.CoreCompileInputs.cache
 /home/runner/work/WebBossModeller-Backend/WebBossModeller-Backend/WebBossModellerSqlGenerator/obj/Debug/net6.0/WebBossModellerSqlGenerator.MvcApplicationPartsAssemblyInfo.cs
 /home/runner/work/WebBossModeller-Backend/WebBossModeller-Backend/WebBossModellerSqlGenerator/obj/Debug/net6.0/WebBossModellerSqlGenerator.MvcApplicationPartsAssemblyInfo.cache
-/home/runner/work/WebBossModeller-Backend/WebBossModeller-Backend/WebBossModellerSqlGenerator/obj/Debug/net6.0/WebBossModellerSqlGenerator.sourcelink.json
 /home/runner/work/WebBossModeller-Backend/WebBossModeller-Backend/WebBossModellerSqlGenerator/obj/Debug/net6.0/staticwebassets.build.json
 /home/runner/work/WebBossModeller-Backend/WebBossModeller-Backend/WebBossModellerSqlGenerator/obj/Debug/net6.0/staticwebassets.development.json
-/home/runner/work/WebBossModeller-Backend/WebBossModeller-Backend/WebBossModellerSqlGenerator/obj/Debug/net6.0/staticwebassets/msbuild.WebBossModellerSqlGenerator.Microsoft.AspNetCore.StaticWebAssets.props
-/home/runner/work/WebBossModeller-Backend/WebBossModeller-Backend/WebBossModellerSqlGenerator/obj/Debug/net6.0/staticwebassets/msbuild.build.WebBossModellerSqlGenerator.props
-/home/runner/work/WebBossModeller-Backend/WebBossModeller-Backend/WebBossModellerSqlGenerator/obj/Debug/net6.0/staticwebassets/msbuild.buildMultiTargeting.WebBossModellerSqlGenerator.props
-/home/runner/work/WebBossModeller-Backend/WebBossModeller-Backend/WebBossModellerSqlGenerator/obj/Debug/net6.0/staticwebassets/msbuild.buildTransitive.WebBossModellerSqlGenerator.props
-/home/runner/work/WebBossModeller-Backend/WebBossModeller-Backend/WebBossModellerSqlGenerator/obj/Debug/net6.0/staticwebassets.pack.json
 /home/runner/work/WebBossModeller-Backend/WebBossModeller-Backend/WebBossModellerSqlGenerator/obj/Debug/net6.0/scopedcss/bundle/WebBossModellerSqlGenerator.styles.css
-/home/runner/work/WebBossModeller-Backend/WebBossModeller-Backend/WebBossModellerSqlGenerator/obj/Debug/net6.0/WebBossM.912D2E99.Up2Date
+/home/runner/work/WebBossModeller-Backend/WebBossModeller-Backend/WebBossModellerSqlGenerator/obj/Debug/net6.0/WebBossModellerSqlGenerator.csproj.CopyComplete
 /home/runner/work/WebBossModeller-Backend/WebBossModeller-Backend/WebBossModellerSqlGenerator/obj/Debug/net6.0/WebBossModellerSqlGenerator.dll
 /home/runner/work/WebBossModeller-Backend/WebBossModeller-Backend/WebBossModellerSqlGenerator/obj/Debug/net6.0/refint/WebBossModellerSqlGenerator.dll
 /home/runner/work/WebBossModeller-Backend/WebBossModeller-Backend/WebBossModellerSqlGenerator/obj/Debug/net6.0/WebBossModellerSqlGenerator.pdb
