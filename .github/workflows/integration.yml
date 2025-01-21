@@ -2,8 +2,6 @@ name: test-userservice
 
 on:
     push:
-        paths:
-          - Userservice/**
         branches: ["userservice-dev"]
     pull_request:
         paths:
