@@ -24,7 +24,7 @@ jobs:
               
           - name: change the directory
             run: | 
-                  pwd
+                  ls -a
                   cd Userservice
           - name: Install dependencies
             run: npm install # npm ci is faster but it uses package.lock.json
