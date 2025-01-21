@@ -3,9 +3,9 @@ import Jwt from "jsonwebtoken";
 import { User } from "../database";
 import config from "../config/config";
 import { IUser } from "../database";
-import passport from 'passport';
-const ldap = require('ldapjs');
+import ldap from 'ldapjs';
 import {ApiError, encryptPassword, isPasswordMatch} from "../utils";
+import {authenticate} from 'ldap-authentication'
 
 const jwtSecret = config.JWT_SECRET as string;
 const COOKIE_EXPIRATION_DAYS = 90 // cookie expiration in days
@@ -116,10 +116,17 @@ const login = async(req: Request, res: Response) =>{
         })
         
     } catch (error: any) {
-        
-         res.status(500).json({
-            message: error.message
-        });
+        if (error instanceof ApiError)
+        {
+            res.status(error.statusCode).json({
+                message: error.message
+            });
+        }else{
+            res.status(500).json({
+                message: error.message
+            });
+        }
+         
     }
 
 };
@@ -150,12 +157,10 @@ const sldapTest = async (kennung: string, password: string): Promise<boolean> =>
 const loginLDAP = async(req: Request, res: Response) =>{
     
     try {
-        const client = ldap.createClient({
-            url: LDAP_OPTS.server.url,
-        });
+        
        // Extract username and password from the request
         const { username, password } = req.body;
-        
+      
         if (!username || !password) {
              res.status(400).json({ message: 'Username and password are required' });
           }
