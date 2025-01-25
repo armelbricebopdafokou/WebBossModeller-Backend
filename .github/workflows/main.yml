@@ -18,5 +18,5 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           port: ${{ secrets.SSH_PORT }}
-          source: "."
+          source: "./*"
           target: ${{ secrets.WORK_DIR }}
