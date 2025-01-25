@@ -12,11 +12,5 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Transfer repository to server
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          source: "./*"
-          target: ${{ secrets.WORK_DIR }}
+        run: |
+          ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.SSH_HOST }}@${{ secrets.SSH_USER }} -p ${{ secrets.SSH_PORT }} "rsync -avz . ${{ secrets.WORK_DIR }}"
