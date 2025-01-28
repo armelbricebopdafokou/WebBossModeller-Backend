@@ -1,4 +1,5 @@
 import User, {IUser} from "./models/UserModel";
+import LDapUser, {ILDAPUser} from "./models/LDAPUser";
 import { connectDB } from "./connection";
 
-export { User, IUser, connectDB};
+export { User, IUser, LDapUser,ILDAPUser, connectDB};

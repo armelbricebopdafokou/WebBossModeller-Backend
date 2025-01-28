@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import Jwt from "jsonwebtoken";
-import { User } from "../database";
+import { User, LDapUser, ILDAPUser } from "../database";
 import config from "../config/config";
 import { IUser } from "../database";
 import ldap from 'ldapjs';
@@ -61,9 +61,9 @@ const register = async (req: Request, res: Response) =>{
     }
 };
 
-const createSendToken = async (user:IUser, res: Response)=>{
-    const {lastName, firstName, email } = user;
-    const token = Jwt.sign({lastName,firstName, email}, jwtSecret, {
+const createSendToken = async (user:string, res: Response)=>{
+   
+    const token = Jwt.sign({id:user}, jwtSecret, {
         expiresIn: "1d"
     });
     if(config.env == "production") cookieOptions.secure = true;
@@ -89,23 +89,22 @@ const UserFromToken =  (token:any)=>{
 const login = async(req: Request, res: Response) =>{
     
     try {
-        
        // Extract username and password from the request
         const { username, password } = req.body;
         
         if (!username || !password) {
              res.status(400).json({ message: 'Username and password are required' });
           }
-
-        const user = await User.findOne({email:username}).select("+password");
-
+          
+        const user = await User.findOne({email:username}).select({_id:0, password:1, email:1});
+         
         if(!user || 
             !(await isPasswordMatch(password, user.password as string))
         ){
             throw new ApiError(400, "Incorrect email or password");
         }
 
-        const token = await createSendToken(user!, res);
+        const token = await createSendToken(user.email, res);
 
             res.status(200).json({
             message:"User logged in successfully!",
@@ -157,7 +156,7 @@ const loginLDAP = async(req: Request, res: Response) =>{
         
        // Extract username and password from the request
         const { username, password } = req.body;
-      
+              
         if (!username || !password) {
              res.status(400).json({ message: 'Username and password are required' });
           }
@@ -166,11 +165,11 @@ const loginLDAP = async(req: Request, res: Response) =>{
 
           if (isAuthenticated) {
               console.log('Authentication successful!');
-              const isUserRegistered = await User.findOne({ email:username });
+              const isUserRegistered = await LDapUser.exists({ username:username });
               if(!isUserRegistered)
               {
-                await User.create({
-                    email:username,
+                await LDapUser.create({
+                    username:username,
                     password: await encryptPassword(password)
                   });
               }
@@ -181,9 +180,9 @@ const loginLDAP = async(req: Request, res: Response) =>{
           } else {
                res.status(401).json({ message: 'Invalid username or password' });
           }
-      } catch (err) {
+      } catch (err:any) {
           console.error('LDAP error:', err);
-           res.status(500).json({ message: 'LDAP error', error: err });
+           res.status(500).json({ message: err.message });
       }
     };
 

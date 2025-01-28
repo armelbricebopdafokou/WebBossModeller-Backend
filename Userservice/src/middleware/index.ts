@@ -44,8 +44,6 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) =>{
 
 interface TokenPayload {
     id: string;
-    email: string;
-    lastName: string;
     exp: number;
 }
 
@@ -66,9 +64,17 @@ export const authMiddleware = async (
     try {
        
         const decoded = jwt.verify(authHeader, jwtSecret) as TokenPayload;
-        req.body.email = decoded.email
         
         if(!decoded.exp || decoded.exp == 0) return next(new ApiError(401, "Token has been expired"));
+
+        let id = decoded.id
+
+        if(isEmailValid(id) == false)
+        {
+            req.body.username = id
+        }else{
+            req.body.email = id
+        }
         
         return next();
     } catch (error) {
@@ -76,3 +82,28 @@ export const authMiddleware = async (
         return next(new ApiError(401, "Invalid token"));
     }
 };
+
+var emailRegex = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
+
+function isEmailValid(email:string) {
+    if (!email)
+        return false;
+
+    if(email.length>254)
+        return false;
+
+    var valid = emailRegex.test(email);
+    if(!valid)
+        return false;
+
+    // Further checking of some things regex can't handle
+    var parts = email.split("@");
+    if(parts[0].length>64)
+        return false;
+
+    var domainParts = parts[1].split(".");
+    if(domainParts.some(function(part:any) { return part.length>63; }))
+        return false;
+
+    return true;
+}
