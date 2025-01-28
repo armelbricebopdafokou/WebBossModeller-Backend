@@ -167,7 +167,7 @@ const loginLDAP = async(req: Request, res: Response) =>{
           if (isAuthenticated) {
               console.log('Authentication successful!');
               const isUserRegistered = await User.findOne({ email:username });
-              if(isUserRegistered)
+              if(!isUserRegistered)
               {
                 await User.create({
                     email:username,
@@ -177,7 +177,7 @@ const loginLDAP = async(req: Request, res: Response) =>{
              
               // Issue JWT Token or perform other actions upon successful authentication
               const token = await createSendToken(username, res);
-               res.json({ status: 200, message: 'Authenticated via LDAP', token, user: username });
+               res.status(200).json({ message: 'Authenticated via LDAP', token, user: username });
           } else {
                res.status(401).json({ message: 'Invalid username or password' });
           }
