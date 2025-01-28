@@ -67,6 +67,7 @@ export const authMiddleware = async (
        
         const decoded = jwt.verify(authHeader, jwtSecret) as TokenPayload;
         req.body.email = decoded.email
+        
         if(!decoded.exp || decoded.exp == 0) return next(new ApiError(401, "Token has been expired"));
         
         return next();

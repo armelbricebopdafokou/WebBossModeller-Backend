@@ -8,34 +8,33 @@ import { Jwt, JwtPayload } from "jsonwebtoken";
 
 const saveGraphics = async(req: Request, res: Response) =>{
     try {
-        let { email, graphics } = req.body;
-    
-        const user = await User.findOne({ where: { email } });
+        let  {email, graphics}  = req.body;       
+        const user = await User.findOne({ email });
+      
         if (!user) {
-          res.json({
-            status: 404,
+          res.status(404).json({
             message: "User not found",
           });
           return;
         }
     
         const existingGraphic = user.graphics.find((g) => g.class === graphics.class);
+        
         if (existingGraphic) {
           Object.assign(existingGraphic, graphics);
         } else {
+          
           user.graphics.push(graphics);
         }
     
         await user.save();
     
-        res.json({
-          status: 200,
+        res.status(200).json({
           message: "Graphic saved",
           data: user,
         });
       } catch (error: any) {
-        res.json({
-          status: 500,
+        res.status(500).json({
           message: error.message,
         });
       }
@@ -54,22 +53,19 @@ const getGraphics = async(req: Request, res: Response) =>{
         if (userExists)
         {
             //console.log(userExists.graphics)
-            res.json({
-                status:200,
+            res.status(200).json({
                 message:"Graphic saved",
                 data: userExists.graphics
             })
         }
         else{
-            res.json({
-                status:500,
+            res.status(500).json({
                 message:"Fetch graphic failed",
             })
         }
     
     } catch (error: any) {
-         res.json({
-            status: 500,
+         res.status(500).json({
             message: error.message,
         });
     }

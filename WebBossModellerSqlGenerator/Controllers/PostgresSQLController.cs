@@ -10,9 +10,10 @@ namespace WebBossModellerSqlGenerator.Controllers
     [ApiController]
     public class PostgresSQLController : ControllerBase
     {
-        public PostgresSQLController()
+        private readonly PostgreSQLDatabaseService _postgresqlService;
+        public PostgresSQLController(PostgreSQLDatabaseService postgresqlService)
         {
-           
+           _postgresqlService = postgresqlService;
         }
 
         [HttpGet]
@@ -77,6 +78,35 @@ namespace WebBossModellerSqlGenerator.Controllers
             }
             return Ok(sb.ToString());
         }
+
+        [HttpGet]
+        public ActionResult<string> GetDiagramFromDatabase(string host,string dbName, string schemaName, string dbUser, string dbPassword)
+        {
+             if (string.IsNullOrWhiteSpace(host))
+                return BadRequest("Parameter Hostname is missing");
+            if (string.IsNullOrWhiteSpace(dbName))
+                return BadRequest("Parameter Database Name is missing");
+            if (string.IsNullOrWhiteSpace(schemaName))
+                return BadRequest("Parameter Schema Name is missing");
+            if (string.IsNullOrWhiteSpace(dbPassword))
+                return BadRequest("Parameter user password is missing");
+            if (string.IsNullOrWhiteSpace(dbUser))
+                return BadRequest("Parameter User Name is missing");
+            
+            try
+            {
+                string connectionString = $"User ID={dbUser};Password={dbPassword};Host={host};Port=5432;Database={dbName};";
+                var db = _postgresqlService.GetDatabaseSchema(connectionString, schemaName);
+                var dbDTO = DatabaseDTO.ToDTO(db);
+                return Ok(JsonConvert.SerializeObject(dbDTO));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+    
+
 
     }
 }

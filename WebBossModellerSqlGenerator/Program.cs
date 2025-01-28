@@ -12,6 +12,10 @@ builder.Services.AddCors(options =>
                       });
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddScoped<MSSQLDatabaseService>();
+builder.Services.AddScoped<PostgreSQLDatabaseService>();
+builder.Services.AddScoped<MySQLDatabaseService>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

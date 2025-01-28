@@ -5,9 +5,9 @@ namespace WebBossModellerSqlGenerator.Models
     public record DbTable: ISql
     {
         public string Name { get; init; }
-        public bool IsWeak { get; init; }
-        public List<DbColumn> Columns { get; set; }
-        public List<DbColumn> UniqueCombination { get; private set; } = new List<DbColumn>();
+        public bool IsWeak { get; set; }
+        public List<DbColumn> Columns { get; set; } = new List<DbColumn>();
+        public List<DbColumn> UniqueCombination { get;  set; } = new List<DbColumn>();
         public DbSchema? Schema { get; init; }
 
       

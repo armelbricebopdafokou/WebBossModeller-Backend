@@ -1,16 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net;
 using System.Text;
 using WebBossModellerSqlGenerator.DTO;
 using WebBossModellerSqlGenerator.Models;
 
 namespace WebBossModellerSqlGenerator.Controllers
 {
-    public class MySqlController : Controller
+    [Route("[controller]/[action]")]
+    [ApiController]
+    public class MySqlController : ControllerBase
     {
-
-        public MySqlController()
+        private readonly MySQLDatabaseService _mysqlService;
+        public MySqlController(MySQLDatabaseService mysqlService)
         {
+            _mysqlService = mysqlService;
         }
 
         [HttpGet]
@@ -72,5 +76,33 @@ namespace WebBossModellerSqlGenerator.Controllers
 
             return Ok(sb.ToString());
         }
+
+        [HttpGet]
+        public ActionResult<string> GetDiagramFromDatabase(string host,string dbName, string schemaName, string dbUser, string dbPassword)
+        {
+             if (string.IsNullOrWhiteSpace(host))
+                return BadRequest("Parameter Hostname is missing");
+            if (string.IsNullOrWhiteSpace(dbName))
+                return BadRequest("Parameter Database Name is missing");
+            if (string.IsNullOrWhiteSpace(schemaName))
+                return BadRequest("Parameter Schema Name is missing");
+            if (string.IsNullOrWhiteSpace(dbPassword))
+                return BadRequest("Parameter user password is missing");
+            if (string.IsNullOrWhiteSpace(dbUser))
+                return BadRequest("Parameter User Name is missing");
+            
+            try
+            {
+                string connectionString = $"server={host};user={dbUser};database={dbName};password={dbPassword};";
+                var db = _mysqlService.GetDatabaseSchema(connectionString, schemaName);
+                 var dbDTO = DatabaseDTO.ToDTO(db);
+                return Ok(JsonConvert.SerializeObject(dbDTO));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
     }
 }

@@ -11,10 +11,11 @@ namespace WebBossModellerSqlGenerator.Controllers
     [ApiController]
     public class MSSQLController : ControllerBase
     {
-        
+        private readonly MSSQLDatabaseService _mssqlService;
 
-        public MSSQLController()
+        public MSSQLController( MSSQLDatabaseService mssqlService)
         {
+             _mssqlService = mssqlService;
         }
 
         [HttpGet]
@@ -75,6 +76,33 @@ namespace WebBossModellerSqlGenerator.Controllers
             }
 
             return Ok(sb );
+        }
+
+        [HttpGet]
+        public ActionResult<string> GetDiagramFromDatabase(string host,string dbName, string schemaName, string dbUser, string dbPassword)
+        {
+             if (string.IsNullOrWhiteSpace(host))
+                return BadRequest("Parameter Hostname is missing");
+            if (string.IsNullOrWhiteSpace(dbName))
+                return BadRequest("Parameter Database Name is missing");
+            if (string.IsNullOrWhiteSpace(schemaName))
+                return BadRequest("Parameter Schema Name is missing");
+            if (string.IsNullOrWhiteSpace(dbPassword))
+                return BadRequest("Parameter user password is missing");
+            if (string.IsNullOrWhiteSpace(dbUser))
+                return BadRequest("Parameter User Name is missing");
+            
+            try
+            {
+                string connectionString = $"Data Source={host};Initial Catalog={dbName};User Id={dbUser};Password={dbPassword};";
+                var db = _mssqlService.GetDatabaseSchema(connectionString, schemaName);
+                var dbDTO = DatabaseDTO.ToDTO(db);
+                return Ok(JsonConvert.SerializeObject(dbDTO));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

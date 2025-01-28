@@ -2,7 +2,7 @@
 {
     public record DbSchema(string Name) :ISql
     {
-        public List<DbTable> Tables { get; init; }
+        public List<DbTable> Tables { get; init; } = new List<DbTable>();
         public string ToSqlForMSSSQL()
         {
             return $"\n CREATE SCHEMA [{Name}]; \n GO \n";

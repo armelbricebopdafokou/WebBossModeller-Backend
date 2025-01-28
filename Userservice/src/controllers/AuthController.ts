@@ -50,22 +50,20 @@ const register = async (req: Request, res: Response) =>{
             email: user.email
         }
 
-         res.json({
-            status: 200,
+         res.status(200).json({
             message: "User registered successfully",
             data: userData
         })
     } catch (error: any) {
-         res.json({
-            status: 500,
+         res.status(500).json({
             message: error.message,
         })
     }
 };
 
 const createSendToken = async (user:IUser, res: Response)=>{
-    const {lastName, firstName, email, id } = user;
-    const token = Jwt.sign({lastName,firstName, email, id}, jwtSecret, {
+    const {lastName, firstName, email } = user;
+    const token = Jwt.sign({lastName,firstName, email}, jwtSecret, {
         expiresIn: "1d"
     });
     if(config.env == "production") cookieOptions.secure = true;
@@ -109,8 +107,7 @@ const login = async(req: Request, res: Response) =>{
 
         const token = await createSendToken(user!, res);
 
-            res.json({
-            status: 200,
+            res.status(200).json({
             message:"User logged in successfully!",
             token: token
         })
@@ -169,6 +166,15 @@ const loginLDAP = async(req: Request, res: Response) =>{
 
           if (isAuthenticated) {
               console.log('Authentication successful!');
+              const isUserRegistered = await User.findOne({ email:username });
+              if(isUserRegistered)
+              {
+                await User.create({
+                    email:username,
+                    password: await encryptPassword(password)
+                  });
+              }
+             
               // Issue JWT Token or perform other actions upon successful authentication
               const token = await createSendToken(username, res);
                res.json({ status: 200, message: 'Authenticated via LDAP', token, user: username });

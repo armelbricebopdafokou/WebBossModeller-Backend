@@ -3,7 +3,8 @@
     public record DbDatabase(string Name) : ISql
     {
 
-        public List<DbSchema> Schemas { get; init; }   
+        public DbDatabase():this(""){}
+        public List<DbSchema> Schemas { get; init; } = new List<DbSchema>();   
 
       
         public string ToSqlForPostgresSQL(bool isCaseSensitive)

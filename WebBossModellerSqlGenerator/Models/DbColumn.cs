@@ -4,12 +4,13 @@
     {
         public string Name { get; init; }
         public string Type { get; init; }
-        public bool IsNull { get; init; }
-        public bool IsUnique { get; init; } = false;
-        public bool IsPrimaryKey { get; init; }=false;
-        public bool IsForeignKey { get; init; }
+        public bool IsNull { get; set; }
+        public bool IsUnique { get; set; } = false;
+        public bool IsPrimaryKey { get; set; }=false;
+        public bool IsForeignKey { get; set; }
+        public string? CheckConstraint {get; set; }
         public string? DefaultValue { get; init; } = string.Empty;
-        public DbTable ReferenceTable { get; init; }
+        public DbTable ReferenceTable { get; set; }
 
         public string ToSqlForMSSSQL()
         {
@@ -20,7 +21,7 @@
             if (IsUnique == true) sqlCreate += " UNIQUE ";
             
             sqlCreate += NullAndDefault();
-            
+            if (!string.IsNullOrEmpty(CheckConstraint)) sqlCreate += $" CHECK {CheckConstraint}";
             return sqlCreate ;
         }
 
@@ -33,6 +34,7 @@
             if (IsUnique == true) sqlCreate += " UNIQUE ";
             
             sqlCreate += NullAndDefault();
+            if (!string.IsNullOrEmpty(CheckConstraint)) sqlCreate += $" CHECK {CheckConstraint}";
             return sqlCreate;
         }
 
@@ -51,7 +53,7 @@
             if (IsUnique == true) sqlCreate += " UNIQUE ";
             //if (IsPrimaryKey == true)
               //  sqlCreate += " PRIMARY KEY ";
-            
+            if (!string.IsNullOrEmpty(CheckConstraint)) sqlCreate += $" CHECK {CheckConstraint}";
 
             sqlCreate += NullAndDefault();
             
@@ -65,8 +67,8 @@
             if (!string.IsNullOrEmpty(DefaultValue)) sqlCreate += " DEFAULT " + DefaultValue;
             return sqlCreate;
         }
-
-       
+        
+     
 
     }
 }
