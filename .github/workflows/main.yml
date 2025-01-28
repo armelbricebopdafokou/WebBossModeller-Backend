@@ -1,0 +1,16 @@
+on:
+  push:
+    branches:
+      - deployment
+  workflow_dispatch:
+  
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Transfer repository to server
+        run: |
+          ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.SSH_HOST }}@${{ secrets.SSH_USER }} -p ${{ secrets.SSH_PORT }} "rsync -avz . ${{ secrets.WORK_DIR }}"
