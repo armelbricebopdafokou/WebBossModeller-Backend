@@ -58,6 +58,176 @@
     ]
   },
   {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.MSSQLController",
+    "Method": "GetDiagramFromDatabase",
+    "RelativePath": "MSSQL/GetDiagramFromDatabase",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "host",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "dbName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "schemaName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "dbUser",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "dbPassword",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.MySqlController",
+    "Method": "CreateDatabase",
+    "RelativePath": "MySql/CreateDatabase",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dbName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.MySqlController",
+    "Method": "CreateSchema",
+    "RelativePath": "MySql/CreateSchema",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dbSchema",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.MySqlController",
+    "Method": "GenerateSqlForGraphic",
+    "RelativePath": "MySql/GenerateSqlForGraphic",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "graphicDTO",
+        "Type": "WebBossModellerSqlGenerator.DTO.GraphicDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.MySqlController",
+    "Method": "GetDiagramFromDatabase",
+    "RelativePath": "MySql/GetDiagramFromDatabase",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "host",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "dbName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "schemaName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "dbUser",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "dbPassword",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "WebBossModellerSqlGenerator.Controllers.PostgresSQLController",
     "Method": "CreateDatabase",
     "RelativePath": "PostgresSQL/CreateDatabase",
@@ -131,6 +301,52 @@
         "Name": "graphicDTO",
         "Type": "WebBossModellerSqlGenerator.DTO.GraphicDTO",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.PostgresSQLController",
+    "Method": "GetDiagramFromDatabase",
+    "RelativePath": "PostgresSQL/GetDiagramFromDatabase",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "host",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "dbName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "schemaName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "dbUser",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "dbPassword",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [

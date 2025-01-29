@@ -66,27 +66,36 @@ namespace WebBossModellerSqlGenerator.Models
             var cols = GetPrimaryKey();
             if (cols != null && cols.Length > 0)
             {
-                sql = $"\n ALTER TABLE [{Name}] ADD CONSTRAINT " + this.Name.Substring(0, 3) + "_pk  PRIMARY KEY (";
-                for (int i = 0; i < cols.Length; i++)
+                if(isSensitive == true)
                 {
-                    if (isSensitive == true)
+    	            sql = $"\n ALTER TABLE \"{Name}\" ADD CONSTRAINT " + this.Name.Substring(0, 3) + "_pk  PRIMARY KEY (";
+                    for (int i = 0; i < cols.Length; i++)
                     {
                         sql += $" \"{cols[i].Name}\"";
+                   
+                        if (i < cols.Length - 1)
+                            sql += ",";
                     }
-                    else
-                    {
-                        sql += cols[i].Name;
-                    }
-                    if (i < cols.Length - 1)
-                        sql += ",";
                 }
-                sql += ");";
+                else
+                {
+                    sql = $"\n ALTER TABLE {Name} ADD CONSTRAINT " + this.Name.Substring(0, 3) + "_pk  PRIMARY KEY (";
+                    for (int i = 0; i < cols.Length; i++)
+                    {
+                   
+                        sql += cols[i].Name;
+                    
+                        if (i < cols.Length - 1)
+                        sql += ",";
+                    }
+                }                
+                sql += "); \n";
             }
             if(UniqueCombination.Count() > 0)
             {
                 if(isSensitive == true)
                 {
-                    sql += $"\n ALTER TABLE \"{this.Name}\"  ADD CONSTRAINT {UniqueCombination[0].Name.Substring(0, 2)}_uniq (";
+                    sql += $"\n ALTER TABLE \"{this.Name}\"  ADD UNIQUE {UniqueCombination[0].Name.Substring(0, 2)}_uniq (";
                     for (short i = 0; i < UniqueCombination.Count; i++)
                     {
                         if (i == UniqueCombination.Count - 1)
@@ -101,7 +110,7 @@ namespace WebBossModellerSqlGenerator.Models
                 }
                 else
                 {
-                    sql += $"\n ALTER TABLE {this.Name}  ADD CONSTRAINT {UniqueCombination[0].Name.Substring(0, 2)}_uniq (";
+                    sql += $"\n ALTER TABLE {this.Name}  ADD UNIQUE {UniqueCombination[0].Name.Substring(0, 2)}_uniq (";
                     for (short i = 0; i < UniqueCombination.Count; i++)
                     {
                         if (i == UniqueCombination.Count - 1)
@@ -115,7 +124,7 @@ namespace WebBossModellerSqlGenerator.Models
                     }
                 }
                
-                sql += ");";
+                sql += ");\n";
             }
            
 
@@ -123,11 +132,11 @@ namespace WebBossModellerSqlGenerator.Models
             {
                 if(isSensitive == true)
                 {
-                    sql += $" ALTER TABLE {this.Name} ADD CONSTRAINT {this.Name.Substring(0, 3)}_{c.ReferenceTable.Name.Substring(0, 3)}_fk FOREIGN KEY (\"{c.Name}\") REFERENCES \"{c.ReferenceTable.Name}\" (\"{c.ReferenceTable.GetPrimaryKey()}\"); \n ";
+                    sql += $" ALTER TABLE \"{this.Name}\" ADD CONSTRAINT {this.Name.Substring(0, 3)}_{c.ReferenceTable.Name.Substring(0, 3)}_fk FOREIGN KEY (\"{c.Name}\") REFERENCES \"{c.ReferenceTable.Name}\" (\"{c.ReferenceTable.GetPrimaryKey().First().Name}\"); \n ";
                 }
                 else
                 {
-                    sql += $" ALTER TABLE {this.Name} ADD CONSTRAINT {this.Name.Substring(0, 3)}_{c.ReferenceTable.Name.Substring(0, 3)}_fk FOREIGN KEY ({c.Name}) REFERENCES {c.ReferenceTable.Name} ({c.ReferenceTable.GetPrimaryKey()}); \n";
+                    sql += $" ALTER TABLE {this.Name} ADD CONSTRAINT {this.Name.Substring(0, 3)}_{c.ReferenceTable.Name.Substring(0, 3)}_fk FOREIGN KEY ({c.Name}) REFERENCES {c.ReferenceTable.Name} ({c.ReferenceTable.GetPrimaryKey().First().Name}); \n";
                 }
             }
             return sql;
@@ -169,12 +178,12 @@ namespace WebBossModellerSqlGenerator.Models
                     if(i<cols.Length-1)
                         sql += ",";
                 }
-                sql += ");";
+                sql += "); \n";
             }
 
             if (UniqueCombination.Count > 0)
             {
-                sql += $"\n ALTER TABLE [{this.Name}]  ADD CONSTRAINT {UniqueCombination[0].Name.Substring(0, 2)}_uniq (";
+                sql += $"\n ALTER TABLE [{this.Name}]  ADD UNIQUE {UniqueCombination[0].Name.Substring(0, 2)}_uniq (";
                 for (short i = 0; i < UniqueCombination.Count; i++)
                 {
                     if (i == UniqueCombination.Count - 1)
@@ -186,12 +195,12 @@ namespace WebBossModellerSqlGenerator.Models
                         sql += $"{UniqueCombination[i].Name},";
                     }
                 }
-                sql += ");";
+                sql += ");\n";
             }
 
             foreach (var c in Columns.Where(co => co.IsForeignKey))
             {
-                 sql += $"\n ALTER TABLE {this.Name} ADD CONSTRAINT {this.Name.Substring(0,3)}_{c.ReferenceTable.Name.Substring(0,3)}_fk  FOREIGN KEY ([{c.Name}]) REFERENCES [{c.ReferenceTable.Name}] ([{c.ReferenceTable.GetPrimaryKey()}]); \n";
+                 sql += $"\n ALTER TABLE {this.Name} ADD CONSTRAINT {this.Name.Substring(0,3)}_{c.ReferenceTable.Name.Substring(0,3)}_fk  FOREIGN KEY ([{c.Name}]) REFERENCES [{c.ReferenceTable.Name}] ([{c.ReferenceTable.GetPrimaryKey().First().Name}]); \n";
             }
 
             return sql ;
@@ -217,12 +226,12 @@ namespace WebBossModellerSqlGenerator.Models
                     if (i < cols.Length - 1)
                         sql += ",";
                 }
-                sql += ");";
+                sql += ");\n";
             }
 
             if (UniqueCombination.Count > 0)
             {
-                sql += $"\n ALTER TABLE {this.Name}  ADD CONSTRAINT {UniqueCombination[0].Name.Substring(0, 2)}_uniq (";
+                sql += $"\n ALTER TABLE {this.Name}  ADD UNIQUE {UniqueCombination[0].Name.Substring(0, 2)}_uniq (";
                 for (short i = 0; i < UniqueCombination.Count; i++)
                 {
                     if (i == UniqueCombination.Count - 1)
@@ -234,13 +243,13 @@ namespace WebBossModellerSqlGenerator.Models
                         sql += $"{UniqueCombination[i].Name},";
                     }
                 }
-                sql += ");";
+                sql += ");\n";
             }
            
 
             foreach (var c in Columns.Where(co => co.IsForeignKey))
             {
-                sql += $"ALTER TABLE {this.Name}  ADD CONSTRAINT {this.Name.Substring(0, 3)}_{c.ReferenceTable.Name.Substring(0, 3)}_fk  FOREIGN KEY ({c.Name}) REFERENCES {c.ReferenceTable.Name} ({c.ReferenceTable.GetPrimaryKey()}); \n";
+                sql += $"\n ALTER TABLE {this.Name}  ADD CONSTRAINT {this.Name.Substring(0, 3)}_{c.ReferenceTable.Name.Substring(0, 3)}_fk  FOREIGN KEY ({c.Name}) REFERENCES {c.ReferenceTable.Name} ({c.ReferenceTable.GetPrimaryKey().First().Name}); \n";
             }
 
             return sql;

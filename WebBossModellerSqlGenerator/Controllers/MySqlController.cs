@@ -47,33 +47,54 @@ namespace WebBossModellerSqlGenerator.Controllers
             DbSchema dbSchema = new DbSchema(graphicDTO.SchemaName);
             sb.Append(dbSchema.ToSqlForMySQL());
 
+            // Use a dictionary to store and look up tables by name
+            Dictionary<string, DbTable> tablesDict = new Dictionary<string, DbTable>();
             foreach (var elt in graphicDTO.tables)
             {
-                DbTable table = new DbTable()
+                // sb.Append(elt.ToSqlForPostgresSQL(isCaseSensitive));
+
+
+                DbTable table = new DbTable
                 {
                     Name = elt.ClassName,
-                    Schema = dbSchema
-                };
-
-                table.Columns = new List<DbColumn>();
-                foreach (var col in elt.Items)
-                {
-                    DbColumn column = new DbColumn()
+                    Schema = dbSchema,
+                    Columns = elt.Items.Select(col => new DbColumn
                     {
                         Name = col.Name,
                         Type = col.Type,
                         DefaultValue = col.DefaultValue,
-                        IsNull = !(col.NotNull??false),
+                        IsNull = !(col.NotNull ?? false),
                         IsPrimaryKey = col.IsKey,
-                        IsUnique = col.IsUnique??false
-                    };
-                    table.Columns.Add(column);
-                }
-
-                sb.Append(table.ToSqlForMySQL() + "\n");
-                sb.Append(table.AddContrainstsMySQL() + "\n \n \n");
+                        IsForeignKey = col.IsForeignKey,
+                        IsUnique = col.IsUnique ?? false,
+                        ReferenceTable = new DbTable() { Name = col.ReferenceTable }  // Initialize ReferenceTable as null
+                    }).ToList()
+                };
+                // Store the table by name
+                tablesDict.Add(table.Name, table);
             }
 
+            // Update ReferenceTable properties only when IsForeignKey is true
+            foreach (var table in tablesDict.Values)
+            {
+                foreach (var column in table.Columns)
+                {
+                    if (column.IsForeignKey && !string.IsNullOrEmpty(column.ReferenceTable.Name))
+                    {
+                        tablesDict.TryGetValue(column.ReferenceTable.Name, out DbTable refTable);
+                        column.ReferenceTable = refTable;
+                    }
+                }
+            }
+
+            // Append updated SQL statements if any reference tables were null initially
+            foreach (var table in tablesDict.Values)
+            {
+                sb.Append(table.ToSqlForMySQL() + "\n");
+                sb.Append(table.AddContrainstsMySQL() + "\n \n \n");
+
+            }
+          
             return Ok(sb.ToString());
         }
 

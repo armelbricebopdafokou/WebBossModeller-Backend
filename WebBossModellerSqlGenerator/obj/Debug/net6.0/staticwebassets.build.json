@@ -1,11 +1,12 @@
 {
   "Version": 1,
-  "Hash": "dzOR2auh2VUFpXI2JI7D+UMWuFHP26QnencmDawz5WY=",
+  "Hash": "KGjL2ufGB2HLcVjoiINbb7g4mZq8/Md/Chx8sXIV9ac=",
   "Source": "WebBossModellerSqlGenerator",
   "BasePath": "_content/WebBossModellerSqlGenerator",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
-  "Assets": []
+  "Assets": [],
+  "Endpoints": []
 }

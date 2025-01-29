@@ -12,6 +12,8 @@ namespace WebBossModellerSqlGenerator.DTO
         public string? CheckValue {get; set;}
         public bool? NotNull { get; set; } = false;
         public bool IsKey { get; set; } = false;
+        public bool IsForeignKey { get; set; } = false;
+        public string ReferenceTable { get; set; } = string.Empty;
         public bool? IsUnique { get; set; } = false;
 
         public static ColumnDTO ToDTO(DbColumn column)
@@ -22,6 +24,7 @@ namespace WebBossModellerSqlGenerator.DTO
                 Type = column.Type,
                 IsUnique = column.IsUnique,
                 IsKey = column.IsPrimaryKey,
+                IsForeignKey = column.IsForeignKey,
                 NotNull = !column.IsNull,
                 DefaultValue = column.DefaultValue,
                 CheckValue = column.CheckConstraint
