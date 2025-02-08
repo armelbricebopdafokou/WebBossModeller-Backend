@@ -1,0 +1,6 @@
+[submodule "Userservice"]
+	path = Userservice
+	url = https://github.com/armelbricebopdafokou/WebBossModeller-Backend.git
+[submodule "WebBossModeller-Backend"]
+	path = WebBossModeller-Backend
+	url = https://github.com/armelbricebopdafokou/WebBossModeller-Backend.git
