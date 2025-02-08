@@ -1,0 +1,67 @@
+version: '3.8'
+services:
+  user:
+    container_name: user
+    build:
+      context: ./Userservice
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.users.rule=PathPrefix(`/users`)"
+      - "traefik.http.routers.users.entrypoints=customport"
+      - "traefik.http.middlewares.users-stripprefix.stripprefix.prefixes=/users"
+      - "traefik.http.routers.users.middlewares=users-stripprefix"
+    networks:
+      - web
+
+  sql:
+    container_name: sql
+    build:
+      context: ./WebBossModeller-Backend/WebBossModellerSqlGenerator
+      dockerfile: Dockerfile
+    ports:
+      - "8085:80"
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sql.rule=PathPrefix(`/sql`)"
+      - "traefik.http.routers.sql.entrypoints=customport"
+      - "traefik.http.middlewares.sql-stripprefix.stripprefix.prefixes=/sql"
+      - "traefik.http.routers.sql.middlewares=sql-stripprefix"
+    networks:
+      - web
+      
+ # gateway:
+   # container_name: gateway
+  #  build: 
+     #  context: ./gateway
+    #   dockerfile: Dockerfile
+   # ports:
+    #  - "82:82"   
+    #restart: unless-stopped
+    
+   
+  traefik:
+    image: traefik:v3.2
+    container_name: traefik
+    command:
+      - "--api.insecure=true"
+      - "--log.level=DEBUG"
+      - "--providers.docker=true"
+      - "--entrypoints.customport.address=:82"
+    ports:
+      - "82:82"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - web
+
+networks:
+  web:
+    external: true
