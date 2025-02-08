@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WebBossModellerSqlGenerator")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+de62a48ac848cbb333098e823bd573e624f615cc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+11665ee9eb509b2065dfefdd5df3c823c0ebcce5")]
 [assembly: System.Reflection.AssemblyProductAttribute("WebBossModellerSqlGenerator")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WebBossModellerSqlGenerator")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

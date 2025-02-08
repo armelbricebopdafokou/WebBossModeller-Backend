@@ -58,7 +58,7 @@ namespace WebBossModellerSqlGenerator.Controllers
                 {
                     Name = elt.ClassName,
                     Schema = dbSchema,
-                    Columns = elt.Items.Select(col => new DbColumn
+                    Columns = elt.Columns.Select(col => new DbColumn
                     {
                         Name = col.Name,
                         Type = col.Type,
@@ -91,7 +91,7 @@ namespace WebBossModellerSqlGenerator.Controllers
             foreach (var table in tablesDict.Values)
             {
                 sb.Append(table.ToSqlForMySQL() + "\n");
-                sb.Append(table.AddContrainstsMySQL() + "\n \n \n");
+                sb.Append(table.AddConstraintsMySQL() + "\n \n \n");
 
             }
           

@@ -46,7 +46,7 @@ public class MSSQLDatabaseService : IDatabaseService
             // Load columns
             table.Columns.AddRange(LoadColumns(connection, schemaName, table.Name));
             // Identify unique combination
-            table.UniqueCombination = GetUniqueColumns(connection, schemaName, table.Name, table.Columns);
+            //table.UniqueCombination = GetUniqueColumns(connection, schemaName, table.Name, table.Columns);
 
             // Mark primary and foreign keys
             MarkKeys(connection, schemaName, table.Name, table.Columns);
@@ -200,8 +200,8 @@ private bool IsWeakEntity(SqlConnection connection, string schemaName, string ta
         WHERE OBJECT_SCHEMA_NAME(kc.parent_object_id) = @SchemaName
         AND OBJECT_NAME(kc.parent_object_id) = @TableName";
 
-    bool hasPrimaryKey = false;
-    bool hasForeignKeyInPrimaryKey = false;
+        HashSet<string> primaryKeyColumns = new HashSet<string>();
+        bool hasForeignKeyInPrimaryKey = false;
 
     using (SqlCommand command = new SqlCommand(query, connection))
     {
@@ -212,13 +212,14 @@ private bool IsWeakEntity(SqlConnection connection, string schemaName, string ta
         {
             while (reader.Read())
             {
+                var columnName = reader["ColumnName"].ToString();
                 var constraintType = reader["ConstraintType"].ToString();
                 if (constraintType == "PK")
                 {
-                    hasPrimaryKey = true;
+                   primaryKeyColumns.Add(columnName);
                 }
 
-                if (constraintType == "PK" && reader["ColumnName"] != DBNull.Value)
+                if (constraintType == "PK" && reader["ColumnName"] != DBNull.Value && primaryKeyColumns.Contains(columnName))
                 {
                     hasForeignKeyInPrimaryKey = true;
                 }
@@ -229,7 +230,7 @@ private bool IsWeakEntity(SqlConnection connection, string schemaName, string ta
     // A table is a weak entity if:
     // - It has a primary key, but the primary key includes foreign keys.
     // - It does not have a strong primary key of its own.
-    return hasPrimaryKey && hasForeignKeyInPrimaryKey;
+    return  hasForeignKeyInPrimaryKey;
 }
 
 

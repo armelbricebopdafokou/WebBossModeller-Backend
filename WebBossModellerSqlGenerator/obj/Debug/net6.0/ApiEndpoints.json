@@ -229,6 +229,83 @@
   },
   {
     "ContainingType": "WebBossModellerSqlGenerator.Controllers.PostgresSQLController",
+    "Method": "AllDatabases",
+    "RelativePath": "PostgresSQL/AllDatabases",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "host",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "dbUser",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "dbPassword",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String[]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.PostgresSQLController",
+    "Method": "AllSchema",
+    "RelativePath": "PostgresSQL/AllSchema",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "host",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "dbUser",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "dbPassword",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "dbName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String[]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.PostgresSQLController",
     "Method": "CreateDatabase",
     "RelativePath": "PostgresSQL/CreateDatabase",
     "HttpMethod": "GET",
@@ -248,7 +325,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "System.String",
+        "Type": "WebBossModellerSqlGenerator.Models.DbDatabase",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -279,7 +356,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "System.String",
+        "Type": "WebBossModellerSqlGenerator.Models.DbSchema",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -351,7 +428,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "System.String",
+        "Type": "WebBossModellerSqlGenerator.DTO.DatabaseDTO",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -360,26 +437,5 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "WebBossModellerSqlGenerator.Controllers.WeatherForecastController",
-    "Method": "Get",
-    "RelativePath": "WeatherForecast",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[WebBossModellerSqlGenerator.WeatherForecast, WebBossModellerSqlGenerator, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ],
-    "EndpointName": "GetWeatherForecast"
   }
 ]

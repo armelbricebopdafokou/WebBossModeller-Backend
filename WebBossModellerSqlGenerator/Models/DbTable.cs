@@ -1,260 +1,207 @@
 ﻿using WebBossModellerSqlGenerator.DTO;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace WebBossModellerSqlGenerator.Models
 {
-    public record DbTable: ISql
+    // DbTable repräsentiert eine Datenbanktabelle und implementiert das ISql-Interface.
+    public record DbTable : ISql
     {
+        // Name der Tabelle
         public string Name { get; init; }
+
+        // Gibt an, ob die Tabelle eine schwache Entität ist
         public bool IsWeak { get; set; }
+
+        // Liste der Spalten in der Tabelle
         public List<DbColumn> Columns { get; set; } = new List<DbColumn>();
-        public List<DbColumn> UniqueCombination { get;  set; } = new List<DbColumn>();
+
+        // Liste der Spalten, die eine eindeutige Kombination bilden
+        public HashSet<List<DbColumn>> UniqueCombination { get; set; } = new HashSet<List<DbColumn>>();
+
+        // Schema, zu dem die Tabelle gehört
         public DbSchema? Schema { get; init; }
 
-      
 
+        // Generiert SQL-Code für Microsoft SQL Server
         public string ToSqlForMSSSQL()
         {
-            var sql = $"CREATE TABLE [{Schema.Name}].[{Name}] ({Environment.NewLine}";
-            foreach (var col in Columns)
+            var sql = $"CREATE TABLE [{Schema?.Name}].[{Name}] ({Environment.NewLine}";
+            for (int i = 0; i < Columns.Count; i++)
             {
-                sql += col.ToSqlForMSSSQL() +", \n" ;
+
+                if (i == Columns.Count - 1)
+                    sql += Columns[i].ToSqlForMSSSQL() + " \n";
+                else
+                    sql += Columns[i].ToSqlForMSSSQL() + ", \n";
             }
+            sql = sql[..^1];
             sql += ");";
-            return sql ;
+            return sql;
         }
-        public void AddUniqueCombination(params DbColumn[] columns)
-        {
-            this.UniqueCombination = columns.Distinct().ToList();
-        }
+
+        
+
+        // Generiert SQL-Code für MySQL
         public string ToSqlForMySQL()
         {
-            var sql = $"CREATE {Name} ({Environment.NewLine}";
-            foreach (var col in Columns)
+            var sql = $"CREATE TABLE {Name} ({Environment.NewLine}";
+            for (int i = 0; i < Columns.Count; i++)
             {
-                sql += col.ToSqlForMSSSQL() + "\n";
+                if (i == Columns.Count - 1)
+                    sql += Columns[i].ToSqlForMySQL() + "\n";
+                else
+                    sql += Columns[i].ToSqlForMySQL() + ",\n";
             }
+           
             sql += ");";
             return sql;
         }
 
+        // Generiert SQL-Code für PostgreSQL
         public string ToSqlForPostgresSQL(bool isCaseSensitive)
         {
-            string sql=string.Empty ;
-            if(isCaseSensitive)
-                sql = $"CREATE TABLE  \"{Name}\" ({Environment.NewLine}";
-            else
-                sql = $"CREATE TABLE {Name} ({Environment.NewLine}";
-
-
-            foreach (var col in Columns)
+            string sql = isCaseSensitive ? $"CREATE TABLE  IF NOT EXISTS  \"{Name}\" ({Environment.NewLine}" : $"CREATE TABLE {Name} ({Environment.NewLine}";
+            for (int i =0; i< Columns.Count; i++)
             {
-                sql += col.ToSqlForPostgresSQL(isCaseSensitive) + "\n";
+                if (i == Columns.Count - 1)
+                    sql += Columns[i].ToSqlForPostgresSQL(isCaseSensitive) + "\n";
+                else
+                    sql += Columns[i].ToSqlForPostgresSQL(isCaseSensitive) + ",\n";
             }
             sql += ");";
             return sql;
         }
 
-        public string AddContrainstsPostgres(bool isSensitive=false)
+        // Fügt Constraints (Primärschlüssel, eindeutige Kombinationen, Fremdschlüssel) für PostgreSQL hinzu
+        public string AddConstraintsPostgres(bool isCaseSensitive = false)
         {
-            if (Columns == null )
-                throw new Exception("No columns or to key");
+            ValidateTable();
 
-            if(Columns != null && Columns.Where(c=> c.IsPrimaryKey && c.IsForeignKey).Count() > 0)
-                throw new Exception("A key cannot be a primary and a foreign key");
+            //PrimärSchlüssel Constrainst
+            string sql = GeneratePrimaryKeyConstraint(Name, GetPrimaryKey(), isCaseSensitive);
+            foreach(var uniquCombis  in UniqueCombination)
+            {
+                sql += GenerateUniqueCombinationConstraint(Name, uniquCombis, isCaseSensitive);
+            }
+            
+            //Foreign Schlüssel Constraint
+            foreach (var col in Columns.Where(c => c.IsForeignKey))
+            {
+                sql += GenerateForeignKeyConstraint(Name, col, isCaseSensitive);
+            }
 
-            string sql = string.Empty ;
-            var cols = GetPrimaryKey();
-            if (cols != null && cols.Length > 0)
-            {
-                if(isSensitive == true)
-                {
-    	            sql = $"\n ALTER TABLE \"{Name}\" ADD CONSTRAINT " + this.Name.Substring(0, 3) + "_pk  PRIMARY KEY (";
-                    for (int i = 0; i < cols.Length; i++)
-                    {
-                        sql += $" \"{cols[i].Name}\"";
-                   
-                        if (i < cols.Length - 1)
-                            sql += ",";
-                    }
-                }
-                else
-                {
-                    sql = $"\n ALTER TABLE {Name} ADD CONSTRAINT " + this.Name.Substring(0, 3) + "_pk  PRIMARY KEY (";
-                    for (int i = 0; i < cols.Length; i++)
-                    {
-                   
-                        sql += cols[i].Name;
-                    
-                        if (i < cols.Length - 1)
-                        sql += ",";
-                    }
-                }                
-                sql += "); \n";
-            }
-            if(UniqueCombination.Count() > 0)
-            {
-                if(isSensitive == true)
-                {
-                    sql += $"\n ALTER TABLE \"{this.Name}\"  ADD UNIQUE {UniqueCombination[0].Name.Substring(0, 2)}_uniq (";
-                    for (short i = 0; i < UniqueCombination.Count; i++)
-                    {
-                        if (i == UniqueCombination.Count - 1)
-                        {
-                            sql += $"\"{UniqueCombination[i].Name}\"";
-                        }
-                        else
-                        {
-                            sql += $"\"{UniqueCombination[i].Name}\",";
-                        }
-                    }
-                }
-                else
-                {
-                    sql += $"\n ALTER TABLE {this.Name}  ADD UNIQUE {UniqueCombination[0].Name.Substring(0, 2)}_uniq (";
-                    for (short i = 0; i < UniqueCombination.Count; i++)
-                    {
-                        if (i == UniqueCombination.Count - 1)
-                        {
-                            sql += $"{UniqueCombination[i].Name}";
-                        }
-                        else
-                        {
-                            sql += $"{UniqueCombination[i].Name},";
-                        }
-                    }
-                }
-               
-                sql += ");\n";
-            }
-           
-
-            foreach (var c in  Columns.Where(co => co.IsForeignKey))
-            {
-                if(isSensitive == true)
-                {
-                    sql += $" ALTER TABLE \"{this.Name}\" ADD CONSTRAINT {this.Name.Substring(0, 3)}_{c.ReferenceTable.Name.Substring(0, 3)}_fk FOREIGN KEY (\"{c.Name}\") REFERENCES \"{c.ReferenceTable.Name}\" (\"{c.ReferenceTable.GetPrimaryKey().First().Name}\"); \n ";
-                }
-                else
-                {
-                    sql += $" ALTER TABLE {this.Name} ADD CONSTRAINT {this.Name.Substring(0, 3)}_{c.ReferenceTable.Name.Substring(0, 3)}_fk FOREIGN KEY ({c.Name}) REFERENCES {c.ReferenceTable.Name} ({c.ReferenceTable.GetPrimaryKey().First().Name}); \n";
-                }
-            }
             return sql;
         }
 
+        // Fügt Constraints (Primärschlüssel, eindeutige Kombinationen, Fremdschlüssel) für Microsoft SQL Server hinzu
+        public string AddConstraintsMSSQL()
+        {
+            ValidateTable();
+
+            string sql = GeneratePrimaryKeyConstraint(Name, GetPrimaryKey());
+            foreach(var uniquCombis in UniqueCombination)
+            {
+                sql += GenerateUniqueCombinationConstraint(Name, uniquCombis);
+            }
+           
+            foreach (var col in Columns.Where(c => c.IsForeignKey))
+            {
+                sql += GenerateForeignKeyConstraint(Name, col);
+            }
+
+            return sql;
+        }
+
+        // Fügt Constraints (Primärschlüssel, eindeutige Kombinationen, Fremdschlüssel) für MySQL hinzu
+        public string AddConstraintsMySQL()
+        {
+            ValidateTable();
+
+            string sql = GeneratePrimaryKeyConstraint(Name, GetPrimaryKey());
+            foreach (var uniquCombis in UniqueCombination)
+            {
+                sql += GenerateUniqueCombinationConstraint(Name, uniquCombis);
+            }
+
+            foreach (var col in Columns.Where(c => c.IsForeignKey))
+            {
+                sql += GenerateForeignKeyConstraint(Name, col);
+            }
+
+            return sql;
+        }
+
+        // Gibt die Primärschlüssel-Spalten der Tabelle zurück
         public DbColumn[] GetPrimaryKey()
         {
-            List<DbColumn> list = new List<DbColumn>();
-            foreach (var primary in Columns)
-            {
-                if (primary.IsPrimaryKey == true && primary.IsNull == true)
-                {
-                    throw new Exception("A primary key must not be null");
-                }
-                else if (primary.IsPrimaryKey == true)
-                {
-                    list.Add(primary);
-                }
-            }
-            return list.ToArray();
+            return Columns.Where(c => c.IsPrimaryKey).ToArray();
         }
 
-        public string AddContrainstsMSSQL()
+        // Validiert die Tabelle (z. B. ob Spalten definiert sind und keine Spalte gleichzeitig Primär- und Fremdschlüssel ist)
+        private void ValidateTable()
         {
-            if (Columns == null )
-                throw new Exception($"No columns ");
+            if (Columns == null || !Columns.Any())
+                throw new ArgumentException("Keine Spalten für die Tabelle definiert.");
 
-            if (Columns != null && Columns.Where(c => c.IsPrimaryKey == true && c.IsForeignKey == true).Count() > 0)
-                throw new Exception("A key cannot be a primary and a foreign key");
-
-            string sql = string.Empty;
-            var cols = GetPrimaryKey();
-            if(cols!= null && cols.Length > 0)
-            {
-                sql = $"\n ALTER TABLE [{Name}] ADD CONSTRAINT " + this.Name.Substring(0, 3) + "_pk  PRIMARY KEY (";
-                for(int i=0; i<cols.Length;i++)
-                {
-                    sql += "[" + cols[i].Name + "]";
-                    if(i<cols.Length-1)
-                        sql += ",";
-                }
-                sql += "); \n";
-            }
-
-            if (UniqueCombination.Count > 0)
-            {
-                sql += $"\n ALTER TABLE [{this.Name}]  ADD UNIQUE {UniqueCombination[0].Name.Substring(0, 2)}_uniq (";
-                for (short i = 0; i < UniqueCombination.Count; i++)
-                {
-                    if (i == UniqueCombination.Count - 1)
-                    {
-                        sql += $"{UniqueCombination[i].Name}";
-                    }
-                    else
-                    {
-                        sql += $"{UniqueCombination[i].Name},";
-                    }
-                }
-                sql += ");\n";
-            }
-
-            foreach (var c in Columns.Where(co => co.IsForeignKey))
-            {
-                 sql += $"\n ALTER TABLE {this.Name} ADD CONSTRAINT {this.Name.Substring(0,3)}_{c.ReferenceTable.Name.Substring(0,3)}_fk  FOREIGN KEY ([{c.Name}]) REFERENCES [{c.ReferenceTable.Name}] ([{c.ReferenceTable.GetPrimaryKey().First().Name}]); \n";
-            }
-
-            return sql ;
+            if (Columns.Any(c => c.IsPrimaryKey && c.IsForeignKey))
+                throw new InvalidOperationException("Eine Spalte kann nicht gleichzeitig Primär- und Fremdschlüssel sein.");
         }
 
-        public string AddContrainstsMySQL()
+        // Generiert SQL-Code für einen Primärschlüssel-Constraint
+        private string GeneratePrimaryKeyConstraint(string tableName, DbColumn[] primaryKeyColumns, bool isCaseSensitive = false)
         {
-            if (Columns == null )
-                throw new Exception("No columns ");
+            if (primaryKeyColumns == null || primaryKeyColumns.Length == 0)
+                return string.Empty;
 
-            if (Columns != null && Columns.Where(c => c.IsPrimaryKey && c.IsForeignKey).Count() > 0)
-                throw new Exception("A key cannot be a primary and a foreign key");
+            string sql = $"\n ALTER TABLE {(isCaseSensitive ? $"\"{tableName}\"" : $"[{tableName}]")} " +
+                         $"ADD CONSTRAINT {tableName.Substring(0, 3)}_pk PRIMARY KEY (";
 
-            string sql = string.Empty;
-            var cols = GetPrimaryKey();
-
-            if (cols != null && cols.Length > 0)
+            for (int i = 0; i < primaryKeyColumns.Length; i++)
             {
-                sql = $"\n ALTER TABLE {Name} ADD CONSTRAINT " + this.Name.Substring(0, 3) + "_pk  PRIMARY KEY (";
-                for (int i = 0; i < cols.Length; i++)
-                {
-                    sql +=  cols[i].Name;
-                    if (i < cols.Length - 1)
-                        sql += ",";
-                }
-                sql += ");\n";
+                sql += (isCaseSensitive ? $"\"{primaryKeyColumns[i].Name}\"" : $"[{primaryKeyColumns[i].Name}]");
+                if (i < primaryKeyColumns.Length - 1)
+                    sql += ",";
             }
 
-            if (UniqueCombination.Count > 0)
-            {
-                sql += $"\n ALTER TABLE {this.Name}  ADD UNIQUE {UniqueCombination[0].Name.Substring(0, 2)}_uniq (";
-                for (short i = 0; i < UniqueCombination.Count; i++)
-                {
-                    if (i == UniqueCombination.Count - 1)
-                    {
-                        sql += $"{UniqueCombination[i].Name}";
-                    }
-                    else
-                    {
-                        sql += $"{UniqueCombination[i].Name},";
-                    }
-                }
-                sql += ");\n";
-            }
-           
-
-            foreach (var c in Columns.Where(co => co.IsForeignKey))
-            {
-                sql += $"\n ALTER TABLE {this.Name}  ADD CONSTRAINT {this.Name.Substring(0, 3)}_{c.ReferenceTable.Name.Substring(0, 3)}_fk  FOREIGN KEY ({c.Name}) REFERENCES {c.ReferenceTable.Name} ({c.ReferenceTable.GetPrimaryKey().First().Name}); \n";
-            }
-
+            sql += ");\n";
             return sql;
         }
 
-       
+        // Generiert SQL-Code für einen Unique-Constraint (eindeutige Kombination von Spalten)
+        private string GenerateUniqueCombinationConstraint(string tableName, List<DbColumn> uniqueColumns, bool isCaseSensitive = false)
+        {
+            if (uniqueColumns == null || !uniqueColumns.Any())
+                return string.Empty;
+
+            string sql = $"\n ALTER TABLE {(isCaseSensitive ? $"\"{tableName}\"" : $"[{tableName}]")} " +
+                         $"ADD UNIQUE (";
+
+            for (int i = 0; i < uniqueColumns.Count; i++)
+            {
+                sql += (isCaseSensitive ? $"\"{uniqueColumns[i].Name}\"" : $"[{uniqueColumns[i].Name}]");
+                if (i < uniqueColumns.Count - 1)
+                    sql += ",";
+            }
+
+            sql += ");\n";
+            return sql;
+        }
+
+        // Generiert SQL-Code für einen Fremdschlüssel-Constraint
+        private string GenerateForeignKeyConstraint(string tableName, DbColumn foreignKeyColumn, bool isCaseSensitive = false)
+        {
+            if (foreignKeyColumn == null || !foreignKeyColumn.IsForeignKey || foreignKeyColumn.ReferenceTable == null)
+                return string.Empty;
+
+            string sql = $"\n ALTER TABLE {(isCaseSensitive ? $"\"{tableName}\"" : $"[{tableName}]")} " +
+                         $"ADD CONSTRAINT {tableName.Substring(0, 3)}_{foreignKeyColumn.ReferenceTable.Name.Substring(0, 3)}_fk " +
+                         $"FOREIGN KEY ({(isCaseSensitive ? $"\"{foreignKeyColumn.Name}\"" : $"[{foreignKeyColumn.Name}]")}) " +
+                         $"REFERENCES {(isCaseSensitive ? $"\"{foreignKeyColumn.ReferenceTable.Name}\"" : $"[{foreignKeyColumn.ReferenceTable.Name}]")} " +
+                         $"({(isCaseSensitive ? $"\"{foreignKeyColumn.ReferenceTable.GetPrimaryKey().First().Name}\"" : $"[{foreignKeyColumn.ReferenceColumn}]")});\n";
+
+            return sql;
+        }
     }
 }

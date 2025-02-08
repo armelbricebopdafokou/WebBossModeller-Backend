@@ -1,34 +1,26 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\WebBossModeller-Backend\\",
+  "WorkspaceRootPath": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\Backend\\WebBossModeller-Backend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{EEFF3FF6-D2FB-4D8C-A4BD-043FCB840559}|WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj|c:\\users\\armel\\documents\\doc\\bo\\sopra\\new\\webbossmodeller-backend\\webbossmodellersqlgenerator\\controllers\\mssqlcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EEFF3FF6-D2FB-4D8C-A4BD-043FCB840559}|WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj|solutionrelative:webbossmodellersqlgenerator\\controllers\\mssqlcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{EEFF3FF6-D2FB-4D8C-A4BD-043FCB840559}|WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj|c:\\users\\armel\\documents\\doc\\bo\\sopra\\new\\backend\\webbossmodeller-backend\\webbossmodellersqlgenerator\\services\\postgresqldatabaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EEFF3FF6-D2FB-4D8C-A4BD-043FCB840559}|WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj|solutionrelative:webbossmodellersqlgenerator\\services\\postgresqldatabaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EEFF3FF6-D2FB-4D8C-A4BD-043FCB840559}|WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj|c:\\users\\armel\\documents\\doc\\bo\\sopra\\new\\webbossmodeller-backend\\webbossmodellersqlgenerator\\controllers\\mysqlcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EEFF3FF6-D2FB-4D8C-A4BD-043FCB840559}|WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj|solutionrelative:webbossmodellersqlgenerator\\controllers\\mysqlcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EEFF3FF6-D2FB-4D8C-A4BD-043FCB840559}|WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj|c:\\users\\armel\\documents\\doc\\bo\\sopra\\new\\webbossmodeller-backend\\webbossmodellersqlgenerator\\controllers\\postgressqlcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{EEFF3FF6-D2FB-4D8C-A4BD-043FCB840559}|WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj|c:\\users\\armel\\documents\\doc\\bo\\sopra\\new\\backend\\webbossmodeller-backend\\webbossmodellersqlgenerator\\controllers\\postgressqlcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EEFF3FF6-D2FB-4D8C-A4BD-043FCB840559}|WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj|solutionrelative:webbossmodellersqlgenerator\\controllers\\postgressqlcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EEFF3FF6-D2FB-4D8C-A4BD-043FCB840559}|WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj|c:\\users\\armel\\documents\\doc\\bo\\sopra\\new\\webbossmodeller-backend\\webbossmodellersqlgenerator\\models\\dbtable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{EEFF3FF6-D2FB-4D8C-A4BD-043FCB840559}|WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj|c:\\users\\armel\\documents\\doc\\bo\\sopra\\new\\backend\\webbossmodeller-backend\\webbossmodellersqlgenerator\\models\\dbcolumn.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EEFF3FF6-D2FB-4D8C-A4BD-043FCB840559}|WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj|solutionrelative:webbossmodellersqlgenerator\\models\\dbcolumn.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EEFF3FF6-D2FB-4D8C-A4BD-043FCB840559}|WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj|c:\\users\\armel\\documents\\doc\\bo\\sopra\\new\\backend\\webbossmodeller-backend\\webbossmodellersqlgenerator\\models\\dbtable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EEFF3FF6-D2FB-4D8C-A4BD-043FCB840559}|WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj|solutionrelative:webbossmodellersqlgenerator\\models\\dbtable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EEFF3FF6-D2FB-4D8C-A4BD-043FCB840559}|WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj|c:\\users\\armel\\documents\\doc\\bo\\sopra\\new\\webbossmodeller-backend\\webbossmodellersqlgenerator\\dto\\tabledto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EEFF3FF6-D2FB-4D8C-A4BD-043FCB840559}|WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj|solutionrelative:webbossmodellersqlgenerator\\dto\\tabledto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EEFF3FF6-D2FB-4D8C-A4BD-043FCB840559}|WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj|c:\\users\\armel\\documents\\doc\\bo\\sopra\\new\\webbossmodeller-backend\\webbossmodellersqlgenerator\\dto\\columndto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{EEFF3FF6-D2FB-4D8C-A4BD-043FCB840559}|WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj|c:\\users\\armel\\documents\\doc\\bo\\sopra\\new\\backend\\webbossmodeller-backend\\webbossmodellersqlgenerator\\dto\\columndto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EEFF3FF6-D2FB-4D8C-A4BD-043FCB840559}|WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj|solutionrelative:webbossmodellersqlgenerator\\dto\\columndto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EEFF3FF6-D2FB-4D8C-A4BD-043FCB840559}|WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj|c:\\users\\armel\\documents\\doc\\bo\\sopra\\new\\webbossmodeller-backend\\webbossmodellersqlgenerator\\models\\dbcolumn.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EEFF3FF6-D2FB-4D8C-A4BD-043FCB840559}|WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj|solutionrelative:webbossmodellersqlgenerator\\models\\dbcolumn.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,98 +30,68 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "TableDTO.cs",
-              "DocumentMoniker": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\DTO\\TableDTO.cs",
-              "RelativeDocumentMoniker": "WebBossModellerSqlGenerator\\DTO\\TableDTO.cs",
-              "ToolTip": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\DTO\\TableDTO.cs",
-              "RelativeToolTip": "WebBossModellerSqlGenerator\\DTO\\TableDTO.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAIAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "DbTable.cs",
+              "DocumentMoniker": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\Backend\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\Models\\DbTable.cs",
+              "RelativeDocumentMoniker": "WebBossModellerSqlGenerator\\Models\\DbTable.cs",
+              "ToolTip": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\Backend\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\Models\\DbTable.cs",
+              "RelativeToolTip": "WebBossModellerSqlGenerator\\Models\\DbTable.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAIA0wEAAAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-28T22:26:52.056Z",
+              "WhenOpened": "2025-02-07T08:48:45.596Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ColumnDTO.cs",
+              "DocumentMoniker": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\Backend\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\DTO\\ColumnDTO.cs",
+              "RelativeDocumentMoniker": "WebBossModellerSqlGenerator\\DTO\\ColumnDTO.cs",
+              "ToolTip": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\Backend\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\DTO\\ColumnDTO.cs",
+              "RelativeToolTip": "WebBossModellerSqlGenerator\\DTO\\ColumnDTO.cs",
+              "ViewState": "AgIAADwAAAAAAAAAAAAgwFQAAABOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-07T00:41:59.249Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DbColumn.cs",
+              "DocumentMoniker": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\Backend\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\Models\\DbColumn.cs",
+              "RelativeDocumentMoniker": "WebBossModellerSqlGenerator\\Models\\DbColumn.cs",
+              "ToolTip": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\Backend\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\Models\\DbColumn.cs",
+              "RelativeToolTip": "WebBossModellerSqlGenerator\\Models\\DbColumn.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAGcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-07T00:37:49.756Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PostgreSQLDatabaseService.cs",
+              "DocumentMoniker": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\Backend\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\Services\\PostgreSQLDatabaseService.cs",
+              "RelativeDocumentMoniker": "WebBossModellerSqlGenerator\\Services\\PostgreSQLDatabaseService.cs",
+              "ToolTip": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\Backend\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\Services\\PostgreSQLDatabaseService.cs",
+              "RelativeToolTip": "WebBossModellerSqlGenerator\\Services\\PostgreSQLDatabaseService.cs",
+              "ViewState": "AgIAAEcBAAAAAAAAAAAkwF4BAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-07T00:28:35.599Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "MySqlController.cs",
-              "DocumentMoniker": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\Controllers\\MySqlController.cs",
-              "RelativeDocumentMoniker": "WebBossModellerSqlGenerator\\Controllers\\MySqlController.cs",
-              "ToolTip": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\Controllers\\MySqlController.cs",
-              "RelativeToolTip": "WebBossModellerSqlGenerator\\Controllers\\MySqlController.cs",
-              "ViewState": "AgIAAEUAAAAAAAAAAAAAwFkAAAALAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-28T22:24:06.496Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "MSSQLController.cs",
-              "DocumentMoniker": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\Controllers\\MSSQLController.cs",
-              "RelativeDocumentMoniker": "WebBossModellerSqlGenerator\\Controllers\\MSSQLController.cs",
-              "ToolTip": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\Controllers\\MSSQLController.cs",
-              "RelativeToolTip": "WebBossModellerSqlGenerator\\Controllers\\MSSQLController.cs",
-              "ViewState": "AgIAAFwAAAAAAAAAAADwv2MAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-28T22:23:49.6Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "DbTable.cs",
-              "DocumentMoniker": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\Models\\DbTable.cs",
-              "RelativeDocumentMoniker": "WebBossModellerSqlGenerator\\Models\\DbTable.cs",
-              "ToolTip": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\Models\\DbTable.cs",
-              "RelativeToolTip": "WebBossModellerSqlGenerator\\Models\\DbTable.cs",
-              "ViewState": "AgIAABIAAAAAAAAAAAApwFsAAAAbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-28T22:08:41.096Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "DbColumn.cs",
-              "DocumentMoniker": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\Models\\DbColumn.cs",
-              "RelativeDocumentMoniker": "WebBossModellerSqlGenerator\\Models\\DbColumn.cs",
-              "ToolTip": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\Models\\DbColumn.cs",
-              "RelativeToolTip": "WebBossModellerSqlGenerator\\Models\\DbColumn.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAAUwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-28T22:08:30.536Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
               "Title": "PostgresSQLController.cs",
-              "DocumentMoniker": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\Controllers\\PostgresSQLController.cs",
+              "DocumentMoniker": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\Backend\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\Controllers\\PostgresSQLController.cs",
               "RelativeDocumentMoniker": "WebBossModellerSqlGenerator\\Controllers\\PostgresSQLController.cs",
-              "ToolTip": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\Controllers\\PostgresSQLController.cs",
+              "ToolTip": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\Backend\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\Controllers\\PostgresSQLController.cs",
               "RelativeToolTip": "WebBossModellerSqlGenerator\\Controllers\\PostgresSQLController.cs",
-              "ViewState": "AgIAAEYAAAAAAAAAAADwv2EAAAANAAAAAAAAAA==",
+              "ViewState": "AgIAAL0AAAAAAAAAAAAowMwAAAA+AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-28T22:08:08.453Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ColumnDTO.cs",
-              "DocumentMoniker": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\DTO\\ColumnDTO.cs",
-              "RelativeDocumentMoniker": "WebBossModellerSqlGenerator\\DTO\\ColumnDTO.cs",
-              "ToolTip": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\DTO\\ColumnDTO.cs",
-              "RelativeToolTip": "WebBossModellerSqlGenerator\\DTO\\ColumnDTO.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAA8AAABBAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-28T22:07:48.688Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-06T23:21:34.968Z"
             }
           ]
         }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj": {}
+    "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\Backend\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj": {}
   },
   "projects": {
-    "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj": {
+    "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\Backend\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj",
+        "projectUniqueName": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\Backend\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj",
         "projectName": "WebBossModellerSqlGenerator",
-        "projectPath": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj",
+        "projectPath": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\Backend\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\WebBossModellerSqlGenerator.csproj",
         "packagesPath": "C:\\Users\\armel\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\obj\\",
+        "outputPath": "C:\\Users\\armel\\Documents\\doc\\BO\\sopra\\new\\Backend\\WebBossModeller-Backend\\WebBossModellerSqlGenerator\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -77,7 +77,7 @@
             },
             "System.Data.SqlClient": {
               "target": "Package",
-              "version": "[4.8.3, )"
+              "version": "[4.9.0, )"
             },
             "npgsql": {
               "target": "Package",

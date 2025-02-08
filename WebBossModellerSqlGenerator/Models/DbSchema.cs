@@ -10,15 +10,15 @@
 
         public string ToSqlForMySQL()
         {
-            return $"CREATE SCHEMA {Name}";
+            return $"CREATE SCHEMA  {Name};";
         }
 
         public string ToSqlForPostgresSQL(bool isCaseSensitive)
         {
             if (isCaseSensitive) 
-                return $"CREATE SCHEMA \"{Name}\" \n";
+                return $"CREATE SCHEMA IF NOT EXISTS \"{Name}\"; \n";
             else
-                return $"CREATE SCHEMA {Name} \n";
+                return $"CREATE SCHEMA IF NOT EXISTS {Name}; \n";
         }
     }
 }

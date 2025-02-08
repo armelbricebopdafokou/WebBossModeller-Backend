@@ -44,7 +44,7 @@ public class MySQLDatabaseService : IDatabaseService
 
             table.Columns.AddRange(LoadColumns(connection, schemaName, table.Name));
             // Identify unique combination
-            table.UniqueCombination = GetUniqueColumns(connection, schemaName, table.Name, table.Columns);
+           // table.UniqueCombination = GetUniqueColumns(connection, schemaName, table.Name, table.Columns);
 
             // Mark primary and foreign keys
             MarkKeys(connection, schemaName, table.Name, table.Columns);

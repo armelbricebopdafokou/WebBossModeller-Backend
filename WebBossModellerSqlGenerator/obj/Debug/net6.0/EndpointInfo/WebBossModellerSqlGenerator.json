@@ -379,17 +379,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/DbDatabase"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/DbDatabase"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/DbDatabase"
                 }
               }
             }
@@ -425,17 +425,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/DbSchema"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/DbSchema"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/DbSchema"
                 }
               }
             }
@@ -539,17 +539,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/DatabaseDTO"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/DatabaseDTO"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/DatabaseDTO"
                 }
               }
             }
@@ -557,12 +557,34 @@
         }
       }
     },
-    "/WeatherForecast": {
+    "/PostgresSQL/AllDatabases": {
       "get": {
         "tags": [
-          "WeatherForecast"
+          "PostgresSQL"
         ],
-        "operationId": "GetWeatherForecast",
+        "parameters": [
+          {
+            "name": "host",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dbUser",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dbPassword",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success",
@@ -571,7 +593,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
+                    "type": "string"
                   }
                 }
               },
@@ -579,7 +601,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
+                    "type": "string"
                   }
                 }
               },
@@ -587,7 +609,75 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/PostgresSQL/AllSchema": {
+      "get": {
+        "tags": [
+          "PostgresSQL"
+        ],
+        "parameters": [
+          {
+            "name": "host",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dbUser",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dbPassword",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dbName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
                   }
                 }
               }
@@ -632,9 +722,139 @@
             "type": "string",
             "nullable": true
           },
+          "referenceColumn": {
+            "type": "string",
+            "nullable": true
+          },
           "isUnique": {
             "type": "boolean",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DatabaseDTO": {
+        "type": "object",
+        "properties": {
+          "databaseName": {
+            "type": "string",
+            "nullable": true
+          },
+          "schemas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SchemaDTO"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DbColumn": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "isNull": {
+            "type": "boolean"
+          },
+          "isUnique": {
+            "type": "boolean"
+          },
+          "isPrimaryKey": {
+            "type": "boolean"
+          },
+          "isForeignKey": {
+            "type": "boolean"
+          },
+          "checkConstraint": {
+            "type": "string",
+            "nullable": true
+          },
+          "defaultValue": {
+            "type": "string",
+            "nullable": true
+          },
+          "referenceTable": {
+            "$ref": "#/components/schemas/DbTable"
+          },
+          "referenceColumn": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DbDatabase": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "schemas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DbSchema"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DbSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "tables": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DbTable"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DbTable": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "isWeak": {
+            "type": "boolean"
+          },
+          "columns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DbColumn"
+            },
+            "nullable": true
+          },
+          "uniqueCombination": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/DbColumn"
+              }
+            },
+            "nullable": true
+          },
+          "schema": {
+            "$ref": "#/components/schemas/DbSchema"
           }
         },
         "additionalProperties": false
@@ -663,6 +883,23 @@
         },
         "additionalProperties": false
       },
+      "SchemaDTO": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "tables": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TableDTO"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "TableDTO": {
         "type": "object",
         "properties": {
@@ -673,41 +910,22 @@
           "isWeak": {
             "type": "boolean"
           },
-          "items": {
+          "columns": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ColumnDTO"
             },
             "nullable": true
           },
-          "uniquerCombination": {
+          "uniqueCombination": {
+            "uniqueItems": true,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ColumnDTO"
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ColumnDTO"
+              }
             },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "WeatherForecast": {
-        "type": "object",
-        "properties": {
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "temperatureC": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "temperatureF": {
-            "type": "integer",
-            "format": "int32",
-            "readOnly": true
-          },
-          "summary": {
-            "type": "string",
             "nullable": true
           }
         },
