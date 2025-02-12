@@ -3,7 +3,7 @@ import Jwt from "jsonwebtoken";
 import { User, LDapUser, ILDAPUser } from "../database";
 import config from "../config/config";
 import { ApiError, encryptPassword, isPasswordMatch } from "../utils";
-import { authenticate } from 'ldap-authentication';
+import ldap from 'ldapjs';
 
 // JWT Secret from configuration
 const jwtSecret = config.JWT_SECRET as string;
@@ -19,12 +19,10 @@ const cookieOptions = {
 };
 
 // LDAP Configuration
-const LDAP_OPTS = {
-    server: {
-        url: 'ldaps://ods0.hs-bochum.de:636', // LDAP server URL
-        searchBase: 'ou=People,o=hs-bochum.de,o=isp', // LDAP search base
-    }
-};
+interface LdapResult {
+    success: boolean;
+    message: string;
+}
 
 /**
  * Registers a new user.
@@ -160,36 +158,29 @@ const login = async (req: Request, res: Response) => {
  * @param password - LDAP password.
  * @returns A promise that resolves to `true` if authentication is successful, otherwise `false`.
  */
-const sldapTest = async (kennung: string, password: string): Promise<boolean> => {
-    if (!kennung || !password) return false;
+async function checkLdap(username: string, password: string): Promise<LdapResult> {
+    const ldaprdn = `uid=${username},ou=People,o=hs-bochum.de,o=isp`;
+    const server = 'ods0.hs-bochum.de';
+    const port = 636;
 
-    // Prepare LDAP options
-    const ldaprdn = `uid=${kennung},${LDAP_OPTS.server.searchBase}`;
-    let options = {
-        ldapOpts: {
-            url: LDAP_OPTS.server.url,
-        },
-        userDn: ldaprdn,
-        userPassword: password,
-        userSearchBase: LDAP_OPTS.server.searchBase,
-        usernameAttribute: 'uid',
-        username: kennung,
-    };
-
-    // Attempt LDAP authentication
-    let user = await authenticate(options);
-    console.log(user);
-
-    return new Promise((resolve, reject) => {
-        if (!user) {
-            console.error('Failed to bind:');
-            resolve(false);
-        } else {
-            console.log('LDAP bind successful');
-            resolve(true);
-        }
+    const client = ldap.createClient({
+        url: `ldaps://${server}:${port}`,
+        tlsOptions: { rejectUnauthorized: false }
     });
-};
+
+    return new Promise((resolve) => {
+        client.bind(ldaprdn, password, (err:any) => {
+            if (err) {
+                console.error('LDAP Bind Error:', err);
+                resolve({ success: false, message: 'Falsche Anmeldeinformationen!' });
+            } else {
+                console.log('Anmeldeinformation OK');
+                resolve({ success: true, message: 'Anmeldeinformation OK' });
+            }
+            client.unbind();
+        });
+    });
+}
 
 /**
  * Handles user login with LDAP authentication.
@@ -204,11 +195,11 @@ const loginLDAP = async (req: Request, res: Response) => {
         if (!username || !password) {
             res.status(400).json({ message: 'Username and password are required' });
         }
-
+        console.log(username, password)
         // Attempt LDAP authentication
-        const isAuthenticated = await sldapTest(username, password);
+        const isAuthenticated = await checkLdap(username as string, password as string);
 
-        if (isAuthenticated) {
+        if (isAuthenticated.success == true) {
             console.log('Authentication successful!');
 
             // Check if the user is already registered in the database
