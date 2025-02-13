@@ -1,6 +1,83 @@
 [
   {
     "ContainingType": "WebBossModellerSqlGenerator.Controllers.MSSQLController",
+    "Method": "AllDatabases",
+    "RelativePath": "MSSQL/AllDatabases",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "host",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "dbUser",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "dbPassword",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String[]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.MSSQLController",
+    "Method": "AllSchema",
+    "RelativePath": "MSSQL/AllSchema",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "host",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "dbUser",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "dbPassword",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "dbName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String[]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.MSSQLController",
     "Method": "CreateDatabase",
     "RelativePath": "MSSQL/CreateDatabase",
     "HttpMethod": "GET",
@@ -13,7 +90,17 @@
         "IsRequired": false
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "WebBossModellerSqlGenerator.Controllers.MSSQLController",
@@ -29,7 +116,17 @@
         "IsRequired": false
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "WebBossModellerSqlGenerator.Controllers.MSSQLController",
@@ -93,7 +190,48 @@
     ],
     "ReturnTypes": [
       {
+        "Type": "WebBossModellerSqlGenerator.DTO.DatabaseDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.MSSQLController",
+    "Method": "MakeDataModel",
+    "RelativePath": "MSSQL/MakeDataModel",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "graphicDTO",
+        "Type": "WebBossModellerSqlGenerator.DTO.GraphicDTO",
+        "IsRequired": true
+      },
+      {
+        "Name": "host",
         "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "dbUser",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "dbPassword",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -325,7 +463,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "WebBossModellerSqlGenerator.Models.DbDatabase",
+        "Type": "System.String",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -429,6 +567,47 @@
     "ReturnTypes": [
       {
         "Type": "WebBossModellerSqlGenerator.DTO.DatabaseDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WebBossModellerSqlGenerator.Controllers.PostgresSQLController",
+    "Method": "MakeDataModel",
+    "RelativePath": "PostgresSQL/MakeDataModel",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "graphicDTO",
+        "Type": "WebBossModellerSqlGenerator.DTO.GraphicDTO",
+        "IsRequired": true
+      },
+      {
+        "Name": "host",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "dbUser",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "dbPassword",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
         "MediaTypes": [
           "text/plain",
           "application/json",

@@ -5,6 +5,8 @@ using WebBossModellerSqlGenerator.Models;
 
 public class PostgreSQLDatabaseService : IDatabaseService
 {
+   
+
     /// <summary>
     /// Create a complete database
     /// </summary>
@@ -157,8 +159,8 @@ public class PostgreSQLDatabaseService : IDatabaseService
         // Erstellen einer neuen Menge, um die Primärschlüsselspalten zu speichern
         HashSet<string> primaryKeyColumns = new HashSet<string>();
 
-        // Variable zur Überprüfung, ob ein Fremdschlüssel im Primärschlüssel vorhanden ist
-        bool hasForeignKeyInPrimaryKey = false;
+        // HashSet, um die Spalten des Fremdschlüssels zu speichern
+        HashSet<string> foreignKeyColumns = new HashSet<string>();
 
         // Erstellen des SQL-Befehls
         using (var command = new NpgsqlCommand(query, connection))
@@ -179,19 +181,28 @@ public class PostgreSQLDatabaseService : IDatabaseService
                     {
                         // Hinzufügen der Primärschlüsselspalte zur Menge
                         primaryKeyColumns.Add(columnName);
+                        if (reader["column_name"] != DBNull.Value && foreignKeyColumns.Contains(columnName))
+                        {
+                            return true;
+                        }
                     }
 
-                    if (constraintType == "f" && primaryKeyColumns.Contains(columnName))
+                    if (constraintType == "f")
                     {
                         // Überprüfen, ob ein Fremdschlüssel im Primärschlüssel vorhanden ist
-                        hasForeignKeyInPrimaryKey = true;
+                        foreignKeyColumns.Add(columnName);
+
+                        if (reader["column_name"] != DBNull.Value && primaryKeyColumns.Contains(columnName))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
         }
 
         // Rückgabe des Ergebnisses, ob die Tabelle eine schwache Entität ist
-        return hasForeignKeyInPrimaryKey;
+        return false;
     }
 
 
@@ -498,6 +509,29 @@ public class PostgreSQLDatabaseService : IDatabaseService
         // Rückgabe der Liste der Schemanamen
         return SchemaList;
     }
+
+
+
+    /// <summary>
+    /// Führt ein SQL-Skript aus.
+    /// </summary>
+    /// <param name="connectionString">Die Verbindungszeichenfolge zur Datenbank.</param>
+    /// <param name="sqlScript">Das auszuführende SQL-Skript.</param>
+    /// <returns>Gibt true zurück, wenn das Skript erfolgreich ausgeführt wurde, andernfalls false.</returns>
+    public void ExecuteScript(string connectionString, string sqlScript)
+    {
+        using (var conn = new NpgsqlConnection(connectionString))
+        {
+            conn.Open();
+            using (NpgsqlCommand command = new NpgsqlCommand(sqlScript, conn))
+            {
+                command.ExecuteNonQuery();
+            }
+            conn.Close();
+        }
+
+    }
+
 
 }
 

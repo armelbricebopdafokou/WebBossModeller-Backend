@@ -79,6 +79,10 @@
               "target": "Package",
               "version": "[4.9.0, )"
             },
+            "YamlDotNet": {
+              "target": "Package",
+              "version": "[16.3.0, )"
+            },
             "npgsql": {
               "target": "Package",
               "version": "[9.0.2, )"

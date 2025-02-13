@@ -9,7 +9,7 @@ namespace WebBossModellerSqlGenerator.Models
     public record DbTable : ISql
     {
         // Name der Tabelle
-        public string Name { get; init; }
+        public string Name { get; set; }
 
         // Gibt an, ob die Tabelle eine schwache Entität ist
         public bool IsWeak { get; set; }
@@ -62,7 +62,7 @@ namespace WebBossModellerSqlGenerator.Models
         // Generiert SQL-Code für PostgreSQL
         public string ToSqlForPostgresSQL(bool isCaseSensitive)
         {
-            string sql = isCaseSensitive ? $"CREATE TABLE  IF NOT EXISTS  \"{Name}\" ({Environment.NewLine}" : $"CREATE TABLE {Name} ({Environment.NewLine}";
+            string sql = isCaseSensitive ? $"DROP TABLE IF EXISTS \"{Name}\";  {Environment.NewLine} CREATE TABLE  \"{Name}\" ({Environment.NewLine}" : $"CREATE TABLE {Name} ({Environment.NewLine}";
             for (int i =0; i< Columns.Count; i++)
             {
                 if (i == Columns.Count - 1)
@@ -80,16 +80,16 @@ namespace WebBossModellerSqlGenerator.Models
             ValidateTable();
 
             //PrimärSchlüssel Constrainst
-            string sql = GeneratePrimaryKeyConstraint(Name, GetPrimaryKey(), isCaseSensitive);
+            string sql = GeneratePrimaryKeyConstraintPostgres(Name, GetPrimaryKey(), isCaseSensitive);
             foreach(var uniquCombis  in UniqueCombination)
             {
-                sql += GenerateUniqueCombinationConstraint(Name, uniquCombis, isCaseSensitive);
+                sql += GenerateUniqueCombinationConstraintPostgres(Name, uniquCombis, isCaseSensitive);
             }
             
             //Foreign Schlüssel Constraint
             foreach (var col in Columns.Where(c => c.IsForeignKey))
             {
-                sql += GenerateForeignKeyConstraint(Name, col, isCaseSensitive);
+                sql += GenerateForeignKeyConstraintPostgres(Name, col, isCaseSensitive);
             }
 
             return sql;
@@ -100,15 +100,15 @@ namespace WebBossModellerSqlGenerator.Models
         {
             ValidateTable();
 
-            string sql = GeneratePrimaryKeyConstraint(Name, GetPrimaryKey());
+            string sql = GeneratePrimaryKeyConstraintMSSQL(GetPrimaryKey());
             foreach(var uniquCombis in UniqueCombination)
             {
-                sql += GenerateUniqueCombinationConstraint(Name, uniquCombis);
+                sql += GenerateUniqueCombinationConstraintMSSQL(uniquCombis);
             }
            
             foreach (var col in Columns.Where(c => c.IsForeignKey))
             {
-                sql += GenerateForeignKeyConstraint(Name, col);
+                sql += GenerateForeignKeyConstraintMSSQL(col);
             }
 
             return sql;
@@ -119,15 +119,15 @@ namespace WebBossModellerSqlGenerator.Models
         {
             ValidateTable();
 
-            string sql = GeneratePrimaryKeyConstraint(Name, GetPrimaryKey());
+            string sql = GeneratePrimaryKeyConstraintPostgres(Name, GetPrimaryKey());
             foreach (var uniquCombis in UniqueCombination)
             {
-                sql += GenerateUniqueCombinationConstraint(Name, uniquCombis);
+                sql += GenerateUniqueCombinationConstraintPostgres(Name, uniquCombis);
             }
 
             foreach (var col in Columns.Where(c => c.IsForeignKey))
             {
-                sql += GenerateForeignKeyConstraint(Name, col);
+                sql += GenerateForeignKeyConstraintMSSQL(col);
             }
 
             return sql;
@@ -145,22 +145,21 @@ namespace WebBossModellerSqlGenerator.Models
             if (Columns == null || !Columns.Any())
                 throw new ArgumentException("Keine Spalten für die Tabelle definiert.");
 
-            if (Columns.Any(c => c.IsPrimaryKey && c.IsForeignKey))
-                throw new InvalidOperationException("Eine Spalte kann nicht gleichzeitig Primär- und Fremdschlüssel sein.");
+            
         }
 
         // Generiert SQL-Code für einen Primärschlüssel-Constraint
-        private string GeneratePrimaryKeyConstraint(string tableName, DbColumn[] primaryKeyColumns, bool isCaseSensitive = false)
+        private string GeneratePrimaryKeyConstraintPostgres(string tableName, DbColumn[] primaryKeyColumns, bool isCaseSensitive = false)
         {
             if (primaryKeyColumns == null || primaryKeyColumns.Length == 0)
                 return string.Empty;
 
-            string sql = $"\n ALTER TABLE {(isCaseSensitive ? $"\"{tableName}\"" : $"[{tableName}]")} " +
-                         $"ADD CONSTRAINT {tableName.Substring(0, 3)}_pk PRIMARY KEY (";
+            string sql = $"\n ALTER TABLE {(isCaseSensitive ? $"\"{tableName}\"" : $"{tableName}")} " +
+                         $"ADD CONSTRAINT {tableName.Substring(0, 3)}_{Guid.NewGuid().ToString().Substring(0,5)}_pk PRIMARY KEY (";
 
             for (int i = 0; i < primaryKeyColumns.Length; i++)
             {
-                sql += (isCaseSensitive ? $"\"{primaryKeyColumns[i].Name}\"" : $"[{primaryKeyColumns[i].Name}]");
+                sql += (isCaseSensitive ? $"\"{primaryKeyColumns[i].Name}\"" : $"{primaryKeyColumns[i].Name}");
                 if (i < primaryKeyColumns.Length - 1)
                     sql += ",";
             }
@@ -169,18 +168,38 @@ namespace WebBossModellerSqlGenerator.Models
             return sql;
         }
 
-        // Generiert SQL-Code für einen Unique-Constraint (eindeutige Kombination von Spalten)
-        private string GenerateUniqueCombinationConstraint(string tableName, List<DbColumn> uniqueColumns, bool isCaseSensitive = false)
+        // Generiert SQL-Code für einen Primärschlüssel-Constraint
+        private string GeneratePrimaryKeyConstraintMSSQL(DbColumn[] primaryKeyColumns)
+        {
+            if (primaryKeyColumns == null || primaryKeyColumns.Length == 0)
+                return string.Empty;
+
+            string sql = $"\n ALTER TABLE [{Schema?.Name}].[{Name}] " +
+                         $"ADD CONSTRAINT {Name.Substring(0, 3)}_{Guid.NewGuid().ToString().Substring(0, 5)}_pk PRIMARY KEY (";
+
+            for (int i = 0; i < primaryKeyColumns.Length; i++)
+            {
+                sql +=  $"[{primaryKeyColumns[i].Name}]";
+                if (i < primaryKeyColumns.Length - 1)
+                    sql += ",";
+            }
+
+            sql += ");\n";
+            return sql;
+        }
+
+        // Generiert SQL-Code für einen Unique-Constraint (eindeutige Kombination von Spalten) für Postgres
+        private string GenerateUniqueCombinationConstraintPostgres(string tableName, List<DbColumn> uniqueColumns, bool isCaseSensitive = false)
         {
             if (uniqueColumns == null || !uniqueColumns.Any())
                 return string.Empty;
 
-            string sql = $"\n ALTER TABLE {(isCaseSensitive ? $"\"{tableName}\"" : $"[{tableName}]")} " +
+            string sql = $"\n ALTER TABLE {(isCaseSensitive ? $"\"{tableName}\"" : $"{tableName}")} " +
                          $"ADD UNIQUE (";
 
             for (int i = 0; i < uniqueColumns.Count; i++)
             {
-                sql += (isCaseSensitive ? $"\"{uniqueColumns[i].Name}\"" : $"[{uniqueColumns[i].Name}]");
+                sql += (isCaseSensitive ? $"\"{uniqueColumns[i].Name}\"" : $"{uniqueColumns[i].Name}");
                 if (i < uniqueColumns.Count - 1)
                     sql += ",";
             }
@@ -189,17 +208,54 @@ namespace WebBossModellerSqlGenerator.Models
             return sql;
         }
 
-        // Generiert SQL-Code für einen Fremdschlüssel-Constraint
-        private string GenerateForeignKeyConstraint(string tableName, DbColumn foreignKeyColumn, bool isCaseSensitive = false)
+        // Generiert SQL-Code für einen Unique-Constraint (eindeutige Kombination von Spalten) für MSSQL
+        private string GenerateUniqueCombinationConstraintMSSQL(List<DbColumn> uniqueColumns)
+        {
+            if (uniqueColumns == null || !uniqueColumns.Any())
+                return string.Empty;
+
+            string sql = $"\n ALTER TABLE [{Schema?.Name}].[{Name}] " +
+                         $"ADD UNIQUE (";
+
+            for (int i = 0; i < uniqueColumns.Count; i++)
+            {
+                sql += ($"[{uniqueColumns[i].Name}]");
+                if (i < uniqueColumns.Count - 1)
+                    sql += ",";
+            }
+
+            sql += ");\n";
+            return sql;
+        }
+
+
+
+        // Generiert SQL-Code für einen Fremdschlüssel-Constraint für PostgresSQL
+        private string GenerateForeignKeyConstraintPostgres(string tableName, DbColumn foreignKeyColumn, bool isCaseSensitive = false)
         {
             if (foreignKeyColumn == null || !foreignKeyColumn.IsForeignKey || foreignKeyColumn.ReferenceTable == null)
                 return string.Empty;
 
-            string sql = $"\n ALTER TABLE {(isCaseSensitive ? $"\"{tableName}\"" : $"[{tableName}]")} " +
+            string sql = $"\n ALTER TABLE {(isCaseSensitive ? $"\"{tableName}\"" : $"{tableName}")} " +
                          $"ADD CONSTRAINT {tableName.Substring(0, 3)}_{foreignKeyColumn.ReferenceTable.Name.Substring(0, 3)}_fk " +
-                         $"FOREIGN KEY ({(isCaseSensitive ? $"\"{foreignKeyColumn.Name}\"" : $"[{foreignKeyColumn.Name}]")}) " +
-                         $"REFERENCES {(isCaseSensitive ? $"\"{foreignKeyColumn.ReferenceTable.Name}\"" : $"[{foreignKeyColumn.ReferenceTable.Name}]")} " +
-                         $"({(isCaseSensitive ? $"\"{foreignKeyColumn.ReferenceTable.GetPrimaryKey().First().Name}\"" : $"[{foreignKeyColumn.ReferenceColumn}]")});\n";
+                         $"FOREIGN KEY ({(isCaseSensitive ? $"\"{foreignKeyColumn.Name}\"" : $"{foreignKeyColumn.Name}")}) " +
+                         $"REFERENCES {(isCaseSensitive ? $"\"{foreignKeyColumn.ReferenceTable.Name}\"" : $"{foreignKeyColumn.ReferenceTable.Name}")} " +
+                         $"({(isCaseSensitive ? $"\"{foreignKeyColumn.ReferenceTable.GetPrimaryKey().First().Name}\"" : $"{foreignKeyColumn.ReferenceColumn}")});\n";
+
+            return sql;
+        }
+
+        // Generiert SQL-Code für einen Fremdschlüssel-Constraint für MSSQL
+        private string GenerateForeignKeyConstraintMSSQL(DbColumn foreignKeyColumn)
+        {
+            if (foreignKeyColumn == null || !foreignKeyColumn.IsForeignKey || foreignKeyColumn.ReferenceTable == null)
+                return string.Empty;
+
+            string sql = $"\n ALTER TABLE [{Schema?.Name}].[{Name}] " +
+                         $"ADD CONSTRAINT {Name.Substring(0, 3)}_{foreignKeyColumn.ReferenceTable.Name.Substring(0, 3)}_fk " +
+                         $"FOREIGN KEY ([{foreignKeyColumn.Name}]) " +
+                         $"REFERENCES [{foreignKeyColumn.ReferenceTable.Schema?.Name}].[{foreignKeyColumn.ReferenceTable.Name}]" +
+                         $"([{foreignKeyColumn.ReferenceColumn}]);\n";
 
             return sql;
         }

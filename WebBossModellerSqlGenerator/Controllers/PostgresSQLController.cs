@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using System.Text;
+using System.Xml.Linq;
 using WebBossModellerSqlGenerator.DTO;
 using WebBossModellerSqlGenerator.Models;
 
@@ -29,20 +31,31 @@ namespace WebBossModellerSqlGenerator.Controllers
         // Der Methodenname ist "CreateDatabase", was darauf hindeutet, dass sie eine Datenbank erstellt.
         // Die Methode gibt ein ActionResult vom Typ DbDatabase zurück.
         [HttpGet]
-        public async Task<ActionResult<DbDatabase>> CreateDatabase(string dbName, bool isCaseSensitive = false)
+        public async Task<ActionResult<string>> CreateDatabase(string dbName, bool isCaseSensitive = false)
         {
-            // Überprüfung, ob der Datenbankname (dbName) null oder leer ist.
-            // Falls ja, wird ein BadRequest-Resultat mit einer Fehlermeldung zurückgegeben.
-            if (string.IsNullOrWhiteSpace(dbName))
-                return BadRequest("Parameter Name is missing");
+            try
+            {
+                // Überprüfung, ob der Datenbankname (dbName) null oder leer ist.
+                // Falls ja, wird ein BadRequest-Resultat mit einer Fehlermeldung zurückgegeben.
+                if (string.IsNullOrWhiteSpace(dbName))
+                    return BadRequest("Parameter Name is missing");
 
-            // Erstellung einer neuen Instanz der DbDatabase-Klasse mit dem übergebenen Datenbanknamen.
-            DbDatabase db = new DbDatabase(dbName);
+                // Erstellung einer neuen Instanz der DbDatabase-Klasse mit dem übergebenen Datenbanknamen.
+                DbDatabase db = new DbDatabase(dbName);
 
-            // Rückgabe eines OK-Resultats mit dem SQL-Statement, das von der ToSqlForPostgresSQL-Methode generiert wird.
-            // Die Methode ToSqlForPostgresSQL erzeugt das SQL-Statement zur Erstellung der Datenbank in PostgreSQL.
-            // Der Parameter isCaseSensitive bestimmt, ob die Datenbank case-sensitive ist oder nicht.
-            return Ok(db.ToSqlForPostgresSQL(isCaseSensitive));
+                // Rückgabe eines OK-Resultats mit dem SQL-Statement, das von der ToSqlForPostgresSQL-Methode generiert wird.
+                // Die Methode ToSqlForPostgresSQL erzeugt das SQL-Statement zur Erstellung der Datenbank in PostgreSQL.
+                // Der Parameter isCaseSensitive bestimmt, ob die Datenbank case-sensitive ist oder nicht.
+                return Ok(db.ToSqlForPostgresSQL(isCaseSensitive));
+            }
+            catch (Exception ex)
+            {
+                // Loggen von unerwarteten Fehlern.
+                _logger.LogError(ex, "An error occurred while retrieving the schema list for database: {DbName}", dbName);
+                return StatusCode(500, $"An internal error occurred:{ex.Message}");
+            }
+
+           
         }
 
         [HttpGet]
@@ -75,7 +88,7 @@ namespace WebBossModellerSqlGenerator.Controllers
         }
 
         [HttpPost]
-        public ActionResult<string> GenerateSqlForGraphic([FromBody]GraphicDTO graphicDTO)
+        public async Task<ActionResult<string>> GenerateSqlForGraphic([FromBody]GraphicDTO graphicDTO)
         {
             try
             {
@@ -156,6 +169,133 @@ namespace WebBossModellerSqlGenerator.Controllers
                 return StatusCode(500, $"An internal error occurred:{ex.Message}");
             }
            
+        }
+
+        /// <summary>
+        /// Erstellt ein Datenmodell basierend auf den übergebenen daten und Datenbankverbindungsinformationen.
+        /// </summary>
+        /// <param name="graphicDTO">Das Diagramm-DTO, das die Datenbank- und Tabelleninformationen enthält.</param>
+        /// <param name="host">Der Hostname der Datenbank.</param>
+        /// <param name="dbUser">Der Benutzername für die Datenbankverbindung.</param>
+        /// <param name="dbPassword">Das Passwort für die Datenbankverbindung.</param>
+        /// <returns>Ein ActionResult, das den Erfolg oder Fehler der Operation angibt.</returns>
+        [HttpPost]
+        public async Task<ActionResult<bool>> MakeDataModel([FromBody] GraphicDTO graphicDTO, string host, string dbUser, string dbPassword)
+        {
+           
+            // Überprüfung, ob der Hostname (host) null oder leer ist.
+            if (string.IsNullOrWhiteSpace(host))
+            {
+                _logger.LogWarning("MakeDataModel aufgerufen mit fehlendem oder leerem Host-Parameter.");
+                return BadRequest("Parameter Hostname fehlt.");
+            }
+
+            // Überprüfung, ob das Benutzerpasswort (dbPassword) null oder leer ist.
+            if (string.IsNullOrWhiteSpace(dbPassword))
+            {
+                _logger.LogWarning("MakeDataModel aufgerufen mit fehlendem oder leerem dbPassword-Parameter.");
+                return BadRequest("Parameter Benutzerpasswort fehlt.");
+            }
+
+            // Überprüfung, ob der Benutzername (dbUser) null oder leer ist.
+            if (string.IsNullOrWhiteSpace(dbUser))
+            {
+                _logger.LogWarning("MakeDataModel aufgerufen mit fehlendem oder leerem dbUser-Parameter.");
+                return BadRequest("Parameter Benutzername fehlt.");
+            }
+
+            try
+            {
+                // Erstellung des Connection Strings für die Verbindung zur PostgreSQL-Datenbank.
+                string connectionString = $"Username={dbUser};Password={dbPassword};Host={host}";
+
+                // Ermitteln, ob die Datenbank case-sensitiv ist.
+                bool isCaseSensitive = graphicDTO.IsCaseSensitive;
+
+                // Erstellen der Datenbank basierend auf dem Diagramm-DTO.
+                DbDatabase dbDatabase = new DbDatabase(graphicDTO.DatabaseName);
+                _postgresqlService.ExecuteScript(connectionString, dbDatabase.ToSqlForPostgresSQL(isCaseSensitive));
+                
+                // Aktualisieren des Connection Strings mit dem Datenbanknamen.
+                connectionString += isCaseSensitive?$";Database={dbDatabase.Name};": $";Database={dbDatabase.Name.ToLower()};";
+
+                // Erstellen des Schemas basierend auf dem Diagramm-DTO.
+                DbSchema dbSchema = new DbSchema(graphicDTO.SchemaName);
+                string sb = dbSchema.ToSqlForPostgresSQL(isCaseSensitive);
+                 _postgresqlService.ExecuteScript(connectionString, sb);
+               
+
+                // Setzen des Suchpfads (search_path) für das Schema.
+                sb = isCaseSensitive
+                    ? $"SET search_path TO \"{dbSchema.Name}\"; \n\n\n"
+                    : $"SET search_path TO {dbSchema.Name}; \n\n\n";
+
+                // Verwenden eines Dictionarys, um Tabellen nach Namen zu speichern und abzurufen.
+                Dictionary<string, DbTable> tablesDict = new Dictionary<string, DbTable>();
+
+                // Verarbeiten der Tabellen aus dem Diagramm-DTO.
+                foreach (var elt in graphicDTO.tables)
+                {
+                    DbTable table = new DbTable
+                    {
+                        Name = elt.ClassName,
+                        Schema = dbSchema,
+                        Columns = elt.Columns.Select(col => new DbColumn
+                        {
+                            Name = col.Name,
+                            Type = col.Type,
+                            DefaultValue = col.DefaultValue,
+                            IsNull = !(col.NotNull ?? false),
+                            IsPrimaryKey = col.IsKey,
+                            IsForeignKey = col.IsForeignKey,
+                            CheckConstraint = col.CheckValue,
+                            IsUnique = col.IsUnique ?? false,
+                            ReferenceColumn = col.ReferenceColumn,
+                            ReferenceTable = new DbTable() { Name = col.ReferenceTable }  // Initialisierung der Referenztabelle
+                        }).ToList(),
+                    };
+
+                    // Übertragung der Unique-Kombinationen.
+                    foreach (var cDTOList in elt.UniqueCombination)
+                    {
+                        table.UniqueCombination.Add(cDTOList.Select(cDTO => cDTO.ToDBColum()).ToList());
+                    }
+
+                    // Speichern der Tabelle im Dictionary.
+                    tablesDict.Add(table.Name, table);
+                }
+
+                // Aktualisieren der Referenztabellen-Eigenschaften, falls IsForeignKey true ist.
+                foreach (var table in tablesDict.Values)
+                {
+                    foreach (var column in table.Columns)
+                    {
+                        if (column.IsForeignKey && !string.IsNullOrEmpty(column.ReferenceTable.Name))
+                        {
+                            tablesDict.TryGetValue(column.ReferenceTable.Name, out DbTable refTable);
+                            column.ReferenceTable = refTable;
+                        }
+                    }
+                }
+
+                // Hinzufügen der SQL-Statements für die Tabellen und Constraints.
+                foreach (var table in tablesDict.Values)
+                {
+                     _postgresqlService.ExecuteScript(connectionString, sb + table.ToSqlForPostgresSQL(isCaseSensitive));
+
+                     _postgresqlService.ExecuteScript(connectionString, sb + table.AddConstraintsPostgres(isCaseSensitive));
+                    
+                }
+
+                // Rückgabe des Erfolgsstatus.
+                return Ok(true);
+            }
+            catch (Exception ex)
+            {
+                // Loggen von unerwarteten Fehlern.
+                _logger.LogError(ex, "Ein Fehler ist aufgetreten während der Generierung des SQL-Statements für ein Diagramm.");
+                return StatusCode(500, $"Ein interner Fehler ist aufgetreten: {ex.Message}");
+            }
         }
 
         [HttpGet]

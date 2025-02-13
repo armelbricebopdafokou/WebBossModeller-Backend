@@ -49,13 +49,13 @@
             sqlCreate += NullAndDefault();
 
             // Fügt CHECK-Constraint hinzu, falls vorhanden
-            if (!string.IsNullOrEmpty(CheckConstraint)) sqlCreate += $" CHECK {CheckConstraint}";
+            if (!string.IsNullOrEmpty(CheckConstraint)) sqlCreate += $" CHECK ([{Name}] {CheckConstraint})";
 
             // Fügt Fremdschlüssel-Constraint hinzu, falls vorhanden
-            if (IsForeignKey && ReferenceTable != null)
-            {
-                sqlCreate += $", FOREIGN KEY ([{Name}]) REFERENCES [{ReferenceTable.Name}]([{ReferenceColumn}])";
-            }
+            //if (IsForeignKey && ReferenceTable != null)
+            //{
+            //    sqlCreate += $", FOREIGN KEY ([{Name}]) REFERENCES [{ReferenceTable.Name}]([{ReferenceColumn}])";
+            //}
 
             return sqlCreate;
         }
