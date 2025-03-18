@@ -44,6 +44,15 @@ services:
    # ports:
     #  - "82:82"   
     #restart: unless-stopped
+
+  mongo-database:
+  container_name: mongo-database
+  image: mongo
+  environment:
+      MONGO_INITDB_ROOT_USERNAME: WebBossNodeller
+      MONGO_INITDB_ROOT_PASSWORD: WebBossNodeller
+  ports:
+      - 27017:27017
     
    
   traefik:

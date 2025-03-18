@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "@types/passport": "^1.0.17",
-    "body-parser": "^1.20.3",
-    "passport": "^0.7.0",
-    "passport-ldapauth": "^3.0.1"
-  }
-}
